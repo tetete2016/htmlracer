@@ -11,7 +11,6 @@ camera.position.z = -5;
 camera.position.y = 3;
 camera.rotation.y=Math.PI;
 var scene = new THREE.Scene();
-
 var Car=function(){
     this.mesh=null;
     this.setMesh=function(geo,mat){
@@ -25,15 +24,23 @@ var Car=function(){
     this.drag=1;
     this.acc=0;
     this.updateMesh=function(){
-        this.mesh.position.x=this.pos.x;
+        this.mesh.position.x=-this.pos.x;
         this.mesh.position.z=this.pos.z;
         this.mesh.rotation.y=this.rot;
     }
     this.physics=function(dt){
-        this.vel.x+=dt*Math.sin(this.rot)*this.acc;
-        this.vel.z+=dt*Math.cos(this.rot)*this.acc;
+        var a=rotate(0,this.acc,this.rot);
+        this.vel.x+=dt*a.x;
+        this.vel.z+=dt*a.y;
+        var v1=rotate(this.vel.x,this.vel.z,-this.rot);
+        var relativeSideForce=v1.x;
+        var sideforce=rotate(v1.x,0,this.rot);
+        this.vel.x-=sideforce.x;
+        this.vel.z-=sideforce.y;
         this.pos.x+=this.vel.x*dt;
         this.pos.z+=this.vel.z*dt;
+        var relativevelX;
+        var relativevelZ;
     }
 }
 var carGeo = new THREE.CubeGeometry(2, 2, 2);
@@ -62,6 +69,12 @@ for(var i=0;i<10;i++){
 var lasttime=new Date().getTime();
 var keysPress=new Array(1000);
 var handle=0;
+function rotate(x,y,r){
+    var cos=Math.cos(r);
+    var sin=Math.sin(r);
+    var p={x:x*cos-y*sin,y:x*sin+y*cos};
+    return p;
+}
 function timer(){
     var timenow=new Date().getTime();
     var dt=timenow-lasttime;
@@ -73,10 +86,11 @@ function timer(){
     player.acc=1;
     player.physics(dt);
     player.updateMesh();
-    camera.position.x=player.pos.x-Math.sin(player.rot)*30;
-    camera.position.z=player.pos.z-Math.cos(player.rot)*30;
-    camera.rotation.y=player.rot+Math.PI;
-    console.log(player.vel);
+    camera.position.x=player.mesh.position.x;//-Math.sin(player.rot)*30;
+    camera.position.y=30;
+    camera.position.z=player.mesh.position.z;//-Math.cos(player.rot)*30;
+    camera.rotation.x=Math.PI/2;
+    //camera.rotation.y=player.rot;
     renderer.render( scene, camera );  
     lasttime=timenow;
     requestAnimationFrame(timer);
