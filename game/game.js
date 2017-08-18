@@ -159,10 +159,14 @@ function timer(){
     player.acc=1;
     player.physics(dt);
     player.updateMesh();
-    camera.position.x=player.mesh.position.x;//-Math.sin(player.rot)*30;
-    camera.position.y=30;
-    camera.position.z=player.mesh.position.z;//-Math.cos(player.rot)*30;
-    camera.rotation.x=Math.PI/2;
+    camera.position.x=player.mesh.position.x-Math.sin(player.rot)*10;
+    camera.position.y=10;
+    camera.position.z=player.mesh.position.z-Math.cos(player.rot)*10;
+    //camera.rotation.x=Math.PI/4;
+    camera.lookAt(player.mesh.position);
+    //alert(camera.rotation.x+","+camera.rotation.y+","+camera.rotation.z);
+    //camera.rotation.y=0;
+    //camera.lookAt(player.mesh);
 
     //camera.rotation.y=player.rot;
     renderer.render( scene, camera );  
