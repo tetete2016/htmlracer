@@ -25,6 +25,7 @@ var ambient=0x114477;
 var sun=0xeebb88;
 var camera = new THREE.PerspectiveCamera();
 camera.aspect=width/height;
+camera.updateProjectionMatrix();
 camera.position.z = -5;
 camera.position.y = 3;
 camera.rotation.y=Math.PI;
