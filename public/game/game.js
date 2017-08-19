@@ -167,7 +167,7 @@ function timer(){
         d.rot=player.rot;
         d.cp=player.cp;
         d.lap=player.lap;
-        dopost(d,"/setpos",function(res){
+        doget(d,"/setpos",function(res){
            sent=false; 
         });
         sent=true;
