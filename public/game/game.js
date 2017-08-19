@@ -12,7 +12,6 @@ lap.style.position="absolute";
 lap.style.zIndex="1";
 lap.style.color="white";
 document.body.appendChild(lap);
-
 var targetList=[];
 var projector = new THREE.Projector();
 /*
@@ -176,6 +175,19 @@ function updatecars(cs){
 var lasttime=new Date().getTime();
 var keysPress=new Array(1000);
 var handle=0;
+var tilt=0;
+window.addEventListener('devicemotion', function (event) {
+	var gv = event.accelerationIncludingGravity;
+    tilt=gv.x/4;
+    if(tilt>1)tilt=1;
+    if(tilt<-1)tilt=-1;
+});
+window.onkeydown = function (ev) {
+    keysPress[ev.keyCode] = true;
+}
+window.onkeyup = function (ev) {
+    keysPress[ev.keyCode] = false;
+}
 function rotate(x,y,r){
     var cos=Math.cos(r);
     var sin=Math.sin(r);
@@ -202,7 +214,7 @@ function timer(){
     var timenow=new Date().getTime();
     var dt=timenow-lasttime;
     dt*=0.001;
-    handle=0;
+    handle=tilt;
     lap.innerHTML=player.lap;
     if(keysPress[37]==true)handle=1;
     if(keysPress[39]==true)handle=-1;
@@ -228,10 +240,4 @@ function timer(){
     lasttime=timenow;
     requestAnimationFrame(timer);
 }timer();
-window.onkeydown = function (ev) {
-    keysPress[ev.keyCode] = true;
-}
-window.onkeyup = function (ev) {
-    keysPress[ev.keyCode] = false;
-}
 // render
