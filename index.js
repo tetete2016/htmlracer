@@ -21,7 +21,7 @@ app.use(express.static('public'));
 app.get('/newcar', function (request, response) {
     var c=new car();
     cars.push(c);
-    response.send(c.cid);
+    response.send(cidgen+"");
 });
 app.get('/carlist', function (request, response) {
     response.send(JSON.stringify(cars));
