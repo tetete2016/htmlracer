@@ -57,11 +57,12 @@ var Car=function(){
         var a=rotate(0,this.acc,this.rot);
         var v=Math.sqrt(this.vel.x*this.vel.x+this.vel.z*this.vel.z);
         if(!isplayer){
+            /*
             this.vel.x+=dt*a.x;
             this.vel.z+=dt*a.y;
             this.vel.x+=this.vel.x*drag*dt;
             this.vel.z+=this.vel.z*drag*dt;
-            return;
+            return;*/
         }
         this.vel.x+=dt*a.x;
         this.vel.z+=dt*a.y;

@@ -44,14 +44,20 @@ app.post('/setpos', function (request, response) {
     console.log(request.body);
     if(request.body==null)
         response.send(JSON.stringify(cars));
-    if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null&&request.body.acc!=null){
+    if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null&&request.body.acc!=null&&request.body.vel!=null){
         var cid=request.body.cid;
         var p=request.body.pos;
         var r=request.body.rot;
         var a=request.body.acc;
         var c=getcarindex(cid);
+        var vx=request.body.vel.x;
+        var vz=request.body.vel.z;
         console.log("carindex:"+c);
         if(c!=null){
+            if(vx!=null&&vz!=null){
+                cars[c].vel.x=vx;
+                cars[c].vel.z=vz;
+            }
             if(p.x!=null&&p.z!=null){
                 cars[c].pos.x=p.x;
                 cars[c].pos.z=p.z;
