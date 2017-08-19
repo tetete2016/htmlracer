@@ -104,6 +104,8 @@ var Car=function(){
         var relativevelZ;
     }
 }
+
+
 var carGeo = new THREE.CubeGeometry(2, 2, 2);
 var carMat = new THREE.MeshLambertMaterial( { color: 0xff0000} )
 var player=new Car();
@@ -139,6 +141,14 @@ for(var i=-10;i<10;i++){
     addcube(2,0,i*4);
 }
 addlongcube(-5,0,0,2,1,20);
+//network
+var cid=null;
+doget(null,"/newcar",function(e){
+    cid=Number.parseInt(e);
+    alert("your cid is "+cid);
+})
+
+
 var lasttime=new Date().getTime();
 var keysPress=new Array(1000);
 var handle=0;

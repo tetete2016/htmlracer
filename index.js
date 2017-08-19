@@ -5,7 +5,9 @@ var bodyParser = require('body-parser');
 var cidgen=0;
 var car=function(){
     this.goal=false;
-    this.pos={x:0,y:0};
+    this.pos={x:0,z:0};
+    this.vel={x:0,z:0};
+    this.rot=0;
     this.cid=cidgen;
     this.lap=0;
     this.cp=0;
@@ -31,7 +33,29 @@ app.get('/carlist', function (request, response) {
 app.get('/a', function (request, response) {
     response.send("test");
 });
-/*
+function getcarindex(cid){
+    for(var i=0;i<cars.length;i++){
+        if(cars[i].cid==cid)return i;
+    }
+    return null;
+};
+app.post('/setpos', function (request, response) {
+    console.log(request.body);
+    if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null){
+        var cid=request.body.cid;
+        var p=request.body.pos;
+        var r=request.body.rot;
+        var c=getcarindex(cid);
+        if(c!=null){
+            if(p.x!=null&&p.z!=null){
+                cars[i].pos.x=p.x;
+                cars[i].pos.z=p.z;
+            }
+            cars[i].rot=r;
+        }
+    }
+}
+         /*
 app.post('/highscore', function (request, response) {
     console.log(request.body);
     if (request.body.name != null && request.body.score != null) {
@@ -48,6 +72,6 @@ app.get('/highscore', function (request, response) {
     response.send(str);
 });
 */
-app.listen(app.get('port'), function () {
+         app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
