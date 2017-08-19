@@ -50,14 +50,7 @@ var Car=function(){
         this.mesh.position.z=this.pos.z;
         this.mesh.rotation.y=this.rot;
     }
-    this.physics=function(dt,isplayer){
-        if(!isplayer){
-            this.vel.x+=dt*a.x;
-            this.vel.z+=dt*a.y;
-            this.vel.x+=this.vel.x*dt;
-            this.vel.z+=this.vel.z*dt;
-            return;
-        }
+    this.physics=function(dt){
         //ma+kv=0
         //k=-ma/vel
         var drag=-1/this.terminalVelocity;
@@ -230,10 +223,10 @@ function timer(){
     if(keysPress[39]==true)handle=-1;
     player.rot+=handle*dt*1;
     player.acc=1;
-    player.physics(dt,true);
+    player.physics(dt);
     player.updateMesh();
     for(var i=0;i<othercar.length;i++){
-        othercar[i].physics(dt,false);
+        othercar[i].physics(dt);
         othercar[i].updateMesh();
     }
     camera.position.x=player.mesh.position.x-Math.sin(player.rot)*10;
