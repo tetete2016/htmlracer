@@ -50,12 +50,19 @@ var Car=function(){
         this.mesh.position.z=this.pos.z;
         this.mesh.rotation.y=this.rot;
     }
-    this.physics=function(dt){
+    this.physics=function(dt,isplayer){
         //ma+kv=0
         //k=-ma/vel
         var drag=-1/this.terminalVelocity;
         var a=rotate(0,this.acc,this.rot);
         var v=Math.sqrt(this.vel.x*this.vel.x+this.vel.z*this.vel.z);
+        if(!isplayer){
+            this.vel.x+=dt*a.x;
+            this.vel.z+=dt*a.y;
+            this.vel.x+=this.vel.x*drag*dt;
+            this.vel.z+=this.vel.z*drag*dt;
+            return;
+        }
         this.vel.x+=dt*a.x;
         this.vel.z+=dt*a.y;
         var v1=rotate(this.vel.x,this.vel.z,-this.rot);
