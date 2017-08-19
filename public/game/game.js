@@ -194,7 +194,7 @@ function timer(){
         dopost(JSON.stringify(d),"/setpos",function(res){
             sent=false; 
             console.log(res);
-            console.log(JSON.parse(res);
+            console.log(JSON.parse(res));
         });
         sent=true;
     }
