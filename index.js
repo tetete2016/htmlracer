@@ -7,6 +7,8 @@ var car=function(){
     this.goal=false;
     this.pos={x:0,y:0};
     this.cid=cidgen;
+    this.lap=0;
+    this.cp=0;
     cidgen++;
 };
 var cars=[];
@@ -21,7 +23,7 @@ app.use(express.static('public'));
 app.get('/newcar', function (request, response) {
     var c=new car();
     cars.push(c);
-    response.send(cidgen+"");
+    response.send(c.cid+"");
 });
 app.get('/carlist', function (request, response) {
     response.send(JSON.stringify(cars));
