@@ -39,7 +39,7 @@ function getcarindex(cid){
     }
     return null;
 };
-app,get('/setpos', function (request, response) {
+app.get('/setpos', function (request, response) {
     //console.log(request.body);
     if(request.body==null)
     response.send("invalid request");
