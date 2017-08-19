@@ -148,7 +148,30 @@ doget(null,"/newcar",function(e){
     player.cid=Number.parseInt(e);
     alert("your cid is "+player.cid);
 })
-
+var othercar=[];
+function updatecars(cs){
+    for(var i=0;i<cs.length;i++){
+        var exists=false;
+        for(var j=0;j<othercar.length;j++){
+            if(exists)continue;
+            if(othercar[j].cid==cs[i].cid){
+                othercar[j].pos=cs[i].pos;
+                othercar[j].vel=cs[i].vel;
+                othercar[j].rot=cs[i].rot;
+                exists=true;
+            }
+        }
+        if(!exists){
+            var newcar=new Car();
+            newcar.pos=cs[i].pos;
+            newcar.cid=cs[i].cid;
+            newcar.vel=cs[i].vel;
+            newcar.rot=cs[i].rot;
+            newcar.setMesh(carGeo,carMat);
+            othercar.push(newcar);
+        }
+    }
+}
 
 var lasttime=new Date().getTime();
 var keysPress=new Array(1000);
@@ -169,7 +192,9 @@ function timer(){
         d.lap=player.lap;
         d.cid=player.cid;
         dopost(JSON.stringify(d),"/setpos",function(res){
-           sent=false; 
+            sent=false; 
+            console.log(res);
+            console.log(JSON.parse(res);
         });
         sent=true;
     }
