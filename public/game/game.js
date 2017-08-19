@@ -209,6 +209,10 @@ function timer(){
     player.rot+=handle*dt*1;
     player.acc=1;
     player.physics(dt);
+    for(var i=0;i<othercar.length;i++){
+        othercar[i].physics(dt);
+        othercar[i].updateMesh();
+    }
     player.updateMesh();
     camera.position.x=player.mesh.position.x-Math.sin(player.rot)*10;
     camera.position.y=10;
