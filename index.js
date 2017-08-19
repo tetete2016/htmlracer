@@ -11,6 +11,7 @@ var car=function(){
     this.cid=cidgen;
     this.lap=0;
     this.cp=0;
+    this.acc=0;
     cidgen++;
 };
 var cars=[];
@@ -43,10 +44,11 @@ app.post('/setpos', function (request, response) {
     console.log(request.body);
     if(request.body==null)
         response.send(JSON.stringify(cars));
-    if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null){
+    if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null&&request.body.acc!=null){
         var cid=request.body.cid;
         var p=request.body.pos;
         var r=request.body.rot;
+        var a=request.body.acc;
         var c=getcarindex(cid);
         console.log("carindex:"+c);
         if(c!=null){
@@ -55,6 +57,7 @@ app.post('/setpos', function (request, response) {
                 cars[c].pos.z=p.z;
             }
             cars[c].rot=r;
+            cars[c].acc=a;
         }
     }
     response.send(JSON.stringify(cars));

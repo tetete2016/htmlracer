@@ -137,7 +137,7 @@ function addlongcube(x,y,z,sx,sy,sz){
     scene.add( mesh );
     targetList.push(mesh);
 }
-for(var i=-10;i<10;i++){
+for(var i=-10;i<70;i++){
     addcube(2,0,i*4);
 }
 addlongcube(-5,0,0,2,1,20);
@@ -157,6 +157,7 @@ function updatecars(cs){
                 othercar[j].pos=cs[i].pos;
                 othercar[j].vel=cs[i].vel;
                 othercar[j].rot=cs[i].rot;
+                othercar[j].acc=cs[i].acc;
                 exists=true;
             }
         }
@@ -166,6 +167,7 @@ function updatecars(cs){
             newcar.cid=cs[i].cid;
             newcar.vel=cs[i].vel;
             newcar.rot=cs[i].rot;
+            newcar.acc=cs[i].acc;
             newcar.setMesh(carGeo,carMat);
             othercar.push(newcar);
         }
@@ -203,6 +205,7 @@ function timer(){
         d.cp=player.cp;
         d.lap=player.lap;
         d.cid=player.cid;
+        d.acc=player.acc;
         dopost(JSON.stringify(d),"/setpos",function(res){
             sent=false; 
             //console.log(res);
