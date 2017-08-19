@@ -44,7 +44,8 @@ var Car=function(){
     this.fric=1;
     this.drag=1;
     this.acc=0;
-    this.terminalVelocity=10;
+    this.power=5;
+    this.terminalVelocity=30;
     this.updateMesh=function(){
         this.mesh.position.x=-this.pos.x;
         this.mesh.position.z=this.pos.z;
@@ -53,7 +54,7 @@ var Car=function(){
     this.physics=function(dt,isplayer){
         //ma+kv=0
         //k=-ma/vel
-        var drag=-1/this.terminalVelocity;
+        var drag=-this.power/this.terminalVelocity;
         var a=rotate(0,this.acc,this.rot);
         var v=Math.sqrt(this.vel.x*this.vel.x+this.vel.z*this.vel.z);
         if(!isplayer){
@@ -64,8 +65,8 @@ var Car=function(){
             this.vel.z+=this.vel.z*drag*dt;
             return;*/
         }
-        this.vel.x+=dt*a.x;
-        this.vel.z+=dt*a.y;
+        this.vel.x+=dt*a.x*this.power;
+        this.vel.z+=dt*a.y*this.power;
         var v1=rotate(this.vel.x,this.vel.z,-this.rot);
         var relativeSideForce=v1.x;
         var sideforce=rotate(v1.x,0,this.rot);
@@ -145,8 +146,16 @@ function addlongcube(x,y,z,sx,sy,sz){
     scene.add( mesh );
     targetList.push(mesh);
 }
+var loader = new THREE.ObjectLoader();
+loader.load("model.json",function ( obj ) {
+    obj.position.set(0,0,20);
+    obj.rotation.y=Math.PI/4*5;
+    var mesh=obj.getChildByName("cube",true);
+    targetList.push(mesh);
+     scene.add( obj );
+});
 for(var i=-10;i<70;i++){
-    addcube(2,0,i*4);
+    addcube(-12,0,i*4);
 }
 addlongcube(-5,0,0,2,1,20);
 //network
@@ -187,7 +196,7 @@ var keysPress=new Array(1000);
 var handle=0;
 var tilt=0;
 window.addEventListener('devicemotion', function (event) {
-	var gv = event.accelerationIncludingGravity;
+    var gv = event.accelerationIncludingGravity;
     tilt=gv.x/4;
     if(tilt>1)tilt=1;
     if(tilt<-1)tilt=-1;
