@@ -51,10 +51,10 @@ app.post('/setpos', function (request, response) {
         console.log("carindex:"+c);
         if(c!=null){
             if(p.x!=null&&p.z!=null){
-                cars[i].pos.x=p.x;
-                cars[i].pos.z=p.z;
+                cars[c].pos.x=p.x;
+                cars[c].pos.z=p.z;
             }
-            cars[i].rot=r;
+            cars[c].rot=r;
         }
     }
     response.send("ok");
