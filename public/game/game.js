@@ -83,7 +83,7 @@ var Car=function(){
         }*/
         var res=8;
         var collided=false;
-        
+
         for(var i=-res/2;i<res/2;i++){
             if(collided)continue;
             var rv=rotate(this.vel.x/v,this.vel.z/v,Math.PI/2/res*i);

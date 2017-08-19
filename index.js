@@ -55,7 +55,7 @@ app.post('/setpos', function (request, response) {
         }
     }
     response.send("ok");
-}
+});
          /*
 app.post('/highscore', function (request, response) {
     console.log(request.body);
@@ -73,6 +73,6 @@ app.get('/highscore', function (request, response) {
     response.send(str);
 });
 */
-         app.listen(app.get('port'), function () {
+app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
