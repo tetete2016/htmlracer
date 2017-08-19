@@ -161,7 +161,7 @@ function updatecars(cs){
                 exists=true;
             }
         }
-        if(!exists){
+        if(!exists&&cs[i].cid!=player.cid){
             var newcar=new Car();
             newcar.pos=cs[i].pos;
             newcar.cid=cs[i].cid;
