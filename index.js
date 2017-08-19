@@ -40,14 +40,15 @@ function getcarindex(cid){
     return null;
 };
 app.get('/setpos', function (request, response) {
-    //console.log(request.body);
+    console.log(request.body);
     if(request.body==null)
-    response.send("invalid request");
+        response.send("invalid request");
     if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null){
         var cid=request.body.cid;
         var p=request.body.pos;
         var r=request.body.rot;
         var c=getcarindex(cid);
+        console.log("carindex:"+c);
         if(c!=null){
             if(p.x!=null&&p.z!=null){
                 cars[i].pos.x=p.x;
