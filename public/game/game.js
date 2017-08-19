@@ -38,6 +38,7 @@ var Car=function(){
         this.mesh=new THREE.Mesh(geo,mat);
         scene.add(this.mesh);
     }
+    this.cid=null;
     this.pos={x:0,z:-20};
     this.vel={x:0,z:0};
     this.rot=0;//radian
@@ -142,10 +143,10 @@ for(var i=-10;i<10;i++){
 }
 addlongcube(-5,0,0,2,1,20);
 //network
-var cid=null;
+var sent=false;
 doget(null,"/newcar",function(e){
-    cid=Number.parseInt(e);
-    alert("your cid is "+cid);
+    player.cid=Number.parseInt(e);
+    alert("your cid is "+player.cid);
 })
 
 
@@ -159,6 +160,18 @@ function rotate(x,y,r){
     return p;
 }
 function timer(){
+    if(player.cid!=null&&!sent){
+        var d={};
+        d.pos=player.pos;
+        d.vel=player.vel;
+        d.rot=player.rot;
+        d.cp=player.cp;
+        d.lap=player.lap;
+        dopost(d,"/setpos",function(res){
+           sent=false; 
+        });
+        sent=true;
+    }
     var timenow=new Date().getTime();
     var dt=timenow-lasttime;
     dt*=0.001;
