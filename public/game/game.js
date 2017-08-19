@@ -238,9 +238,9 @@ function timer(){
         othercar[i].physics(dt,false);
         othercar[i].updateMesh();
     }
-    camera.position.x=player.mesh.position.x-Math.sin(player.rot)*10;
-    camera.position.y=10;
-    camera.position.z=player.mesh.position.z-Math.cos(player.rot)*10;
+    camera.position.x=player.mesh.position.x-Math.sin(player.rot)*12;
+    camera.position.y=3;
+    camera.position.z=player.mesh.position.z-Math.cos(player.rot)*12;
     //camera.rotation.x=Math.PI/4;
     camera.lookAt(player.mesh.position);
     //alert(camera.rotation.x+","+camera.rotation.y+","+camera.rotation.z);
