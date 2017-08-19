@@ -54,6 +54,7 @@ app.post('/setpos', function (request, response) {
             cars[i].rot=r;
         }
     }
+    response.send("ok");
 }
          /*
 app.post('/highscore', function (request, response) {
