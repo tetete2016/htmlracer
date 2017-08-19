@@ -42,7 +42,7 @@ function getcarindex(cid){
 app.post('/setpos', function (request, response) {
     console.log(request.body);
     if(request.body==null)
-        response.send(JSON.stringify(cars);
+        response.send(JSON.stringify(cars));
     if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null){
         var cid=request.body.cid;
         var p=request.body.pos;
