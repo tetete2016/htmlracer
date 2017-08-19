@@ -26,7 +26,7 @@ app.get('/newcar', function (request, response) {
 app.get('/carlist', function (request, response) {
     response.send(JSON.stringify(cars));
 });
-app.get('/', function (request, response) {
+app.get('/a', function (request, response) {
     response.send("test");
 });
 /*
