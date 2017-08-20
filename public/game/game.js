@@ -228,7 +228,7 @@ function timer(){
             //console.log(res);
             var p=JSON.parse(res);
             console.log(p);
-            lap.innerHTML=p.status;
+            lap.innerHTML=p.state;
             updatecars(p.cars);
         });
         sent=true;
