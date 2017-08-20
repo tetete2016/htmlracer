@@ -11,6 +11,7 @@ var lap=document.createElement("div");
 lap.style.position="absolute";
 lap.style.zIndex="1";
 lap.style.color="white";
+lap.style.backgroundColor="black";
 document.body.appendChild(lap);
 var targetList=[];
 var projector = new THREE.Projector();
@@ -159,6 +160,10 @@ for(var i=-10;i<70;i++){
 }
 addlongcube(-5,0,0,2,1,20);
 //network
+var state="wait";
+var start=new Date().getTime()+50000;
+var end=new Date().getTime()+60000;
+var next=new Date().getTime()+70000;
 var sent=false;
 doget(null,"/newcar",function(e){
     player.cid=Number.parseInt(e);
@@ -195,6 +200,7 @@ var lasttime=new Date().getTime();
 var keysPress=new Array(1000);
 var handle=0;
 var tilt=0;
+var laptxt="";
 window.addEventListener('devicemotion', function (event) {
     var gv = event.accelerationIncludingGravity;
     tilt=gv.x/4;
@@ -213,6 +219,8 @@ function rotate(x,y,r){
     var p={x:x*cos-y*sin,y:x*sin+y*cos};
     return p;
 }
+
+var timenow=new Date().getTime();
 function timer(){
     if(player.cid!=null&&!sent){
         var d={};
@@ -228,12 +236,15 @@ function timer(){
             //console.log(res);
             var p=JSON.parse(res);
             console.log(p);
-            lap.innerHTML=p.state;
+            state=p.state;
+            start=p.start;
+            end=p.end;
+            next=p.next;
             updatecars(p.cars);
         });
         sent=true;
     }
-    var timenow=new Date().getTime();
+    timenow=new Date().getTime();
     var dt=timenow-lasttime;
     dt*=0.001;
     handle=tilt;
@@ -261,6 +272,19 @@ function timer(){
     //camera.rotation.y=player.rot;
     renderer.render( scene, camera );  
     lasttime=timenow;
+    ui();
     requestAnimationFrame(timer);
 }timer();
+function ui(){
+    laptxt=state+" ";
+    if(state=="wait"){
+        laptxt+=""+ Math.floor((start- timenow)*0.001)+"";
+    }else if(state=="result"){
+        laptxt+="next race will begin"+ Math.floor((end- timenow)*0.001)+"s";
+    }else if(state=="race"){
+        laptxt+="race will end "+ Math.floor((end- timenow)*0.001)+"s";
+    }
+    lap.innerHTML=laptxt;
+    laptxt="";
+}
 // render

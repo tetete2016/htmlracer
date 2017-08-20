@@ -77,8 +77,10 @@ app.post('/setpos', function (request, response) {
         state="wait";
     }
     console.log(state);
+    /*
     if(request.body==null)
         response.send(JSON.stringify(cars));
+   */
     if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null&&request.body.acc!=null&&request.body.vel!=null){
         var cid=request.body.cid;
         var p=request.body.pos;
@@ -101,7 +103,7 @@ app.post('/setpos', function (request, response) {
             cars[c].acc=a;
         }
     }
-    response.send(JSON.stringify({cars:cars,state:(state)}));
+    response.send(JSON.stringify({cars:cars,state:(state),start:start,end:end,next:next}));
 });
 /*
 app.post('/highscore', function (request, response) {
