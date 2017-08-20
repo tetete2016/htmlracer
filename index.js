@@ -12,9 +12,16 @@ var car=function(){
     this.lap=0;
     this.cp=0;
     this.acc=0;
+    this.audience=false;
     cidgen++;
 };
 var cars=[];
+//     start     end       next
+//wait       race    result     wait
+var state="wait";
+var start;
+var end;
+var next;
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -23,9 +30,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
+//join
+function waitState(){
+    start=new Date().getTime()+3000;
+    end=start+7000;
+    next=end+3000;
+    state="wait";
+}
+//next<time
+function switchState(){
+    start=next+3000;
+    end=start+7000;
+    next=end+3000;
+    state="wait";
+}
 app.get('/newcar', function (request, response) {
     var c=new car();
     cars.push(c);
+    if(state=="wait"){
+        waitState();
+    }
     response.send(c.cid+"");
 });
 app.get('/carlist', function (request, response) {
@@ -42,6 +66,17 @@ function getcarindex(cid){
 };
 app.post('/setpos', function (request, response) {
     console.log(request.body);
+    var time=new Date().getTime();
+    if(time>next){
+        switchState();
+    }else if(time>end){
+        state="result";
+    }else if(time>start){
+        state="race";
+    }else {
+        state="wait";
+    }
+    console.log(state);
     if(request.body==null)
         response.send(JSON.stringify(cars));
     if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null&&request.body.acc!=null&&request.body.vel!=null){
@@ -68,7 +103,7 @@ app.post('/setpos', function (request, response) {
     }
     response.send(JSON.stringify(cars));
 });
-         /*
+/*
 app.post('/highscore', function (request, response) {
     console.log(request.body);
     if (request.body.name != null && request.body.score != null) {
@@ -87,4 +122,5 @@ app.get('/highscore', function (request, response) {
 */
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
+    waitState();
 });
