@@ -237,7 +237,7 @@ function timer(){
     var dt=timenow-lasttime;
     dt*=0.001;
     handle=tilt;
-    lap.innerHTML=player.lap;
+    //lap.innerHTML=player.lap;
     if(keysPress[37]==true)handle=1;
     if(keysPress[39]==true)handle=-1;
     player.rot+=handle*dt*1;
