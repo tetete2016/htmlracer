@@ -101,7 +101,7 @@ app.post('/setpos', function (request, response) {
             cars[c].acc=a;
         }
     }
-    response.send(JSON.stringify(cars));
+    response.send({cars:JSON.stringify(cars),status:(status)});
 });
 /*
 app.post('/highscore', function (request, response) {

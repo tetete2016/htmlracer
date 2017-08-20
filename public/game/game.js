@@ -226,8 +226,10 @@ function timer(){
         dopost(JSON.stringify(d),"/setpos",function(res){
             sent=false; 
             //console.log(res);
-            console.log(JSON.parse(res));
-            updatecars(JSON.parse(res));
+            var p=JSON.parse(res);
+            console.log(p);
+            lap.innerHTML=p.status;
+            updatecars(p.cars);
         });
         sent=true;
     }
