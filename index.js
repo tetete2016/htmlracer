@@ -23,6 +23,9 @@ var start;
 var end;
 var next;
 
+var RACE_DURATION=60000;
+var RESULT_DURATION=10000;
+var WAIT_DURATION=10000;
 app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.json());
@@ -32,16 +35,16 @@ app.use(express.static('public'));
 
 //join
 function waitState(){
-    start=new Date().getTime()+3000;
-    end=start+7000;
-    next=end+3000;
+    start=new Date().getTime()+WAIT_DURATION;
+    end=start+RACE_DURATION;
+    next=end+RESULT_DURATION;
     state="wait";
 }
 //next<time
 function switchState(){
-    start=next+3000;
-    end=start+7000;
-    next=end+3000;
+    start=next+WAIT_DURATION;
+    end=start+RACE_DURATION;
+    next=end+RESULT_DURATION;
     state="wait";
 }
 app.get('/newcar', function (request, response) {
