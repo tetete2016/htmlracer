@@ -299,6 +299,15 @@ function timer(){
     renderer.render( scene, camera );  
     lasttime=timenow;
     ui();
+    if(timenow>next){
+        //switchState();
+    }else if(timenow>end){
+        state="result";
+    }else if(timenow>start){
+        state="race";
+    }else {
+        state="wait";
+    }
     requestAnimationFrame(timer);
 }timer();
 function ui(){
@@ -310,7 +319,7 @@ function ui(){
         count.style.visibility="visible";
         count.innerHTML="Race will begin in "+ Math.floor((start- timenow)*0.001)+"s";
     }else if(state=="result"){
-        laptxt+="next race will begin"+ Math.floor((end- timenow)*0.001)+"s";
+        laptxt+="next race will begin"+ Math.floor((next- timenow)*0.001)+"s";
     }else if(state=="race"){
         laptxt+="race will end "+ Math.floor((end- timenow)*0.001)+"s";
     }
