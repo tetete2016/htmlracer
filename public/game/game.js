@@ -6,7 +6,7 @@ renderer.setClearColor(0xeeeeff);
 renderer.domElement.style.position = "absolute";
 renderer.domElement.style.zIndex = "0";
 document.body.appendChild(renderer.domElement);
-
+var order=0;
 var count=document.createElement("div");
 count.style.position="absolute";
 count.style.width=window.innerWidth+"px";
@@ -22,6 +22,16 @@ lap.style.zIndex="1";
 lap.style.color="white";
 lap.style.background="linear-gradient(to right, rgba(0,0,130,0.5),rgba(0,0,130,0.7),rgba(0,0,130,0.5))";
 document.body.appendChild(lap);
+var orderdiv=document.createElement("div");
+orderdiv.style.position="absolute";
+orderdiv.style.left=(window.innerWidth-230)+"px";
+orderdiv.style.width="230px";
+orderdiv.style.height="60px";
+orderdiv.style.fontSize="40px";
+orderdiv.style.textAlign="center";
+orderdiv.style.color="#fff";
+orderdiv.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
+document.body.appendChild(orderdiv);
 var targetList=[];
 var projector = new THREE.Projector();
 /*
@@ -39,6 +49,13 @@ camera.position.z = -5;
 camera.position.y = 3;
 camera.rotation.y=Math.PI;
 var scene = new THREE.Scene();
+var cp=[
+    {x:0,z:0},
+    {x:0,z:50},
+    {x:-50,z:50},
+    {x:-50,z:0},
+    {x:0,z:0}
+];
 var Car=function(){
     this.cp=0;
     this.lap=1;
@@ -89,22 +106,6 @@ var Car=function(){
         this.vel.z-=sideforce.y*dt;
         this.vel.x+=this.vel.x*drag*dt;
         this.vel.z+=this.vel.z*drag*dt;
-        /*
-        {
-        var ray = new THREE.Raycaster(new THREE.Vector3(-this.pos.x,0,this.pos.z), new THREE.Vector3(-a.x, 0, a.y).normalize());
-        var obj = ray.intersectObjects(targetList);
-        if (obj.length > 0) {
-            var d=obj[0].distance;
-            var dx=this.vel.x*dt;
-            var dz=this.vel.z*dt;
-            dx+=0.5;
-            dz+=0.5;
-            if(d*d<dx*dx+dz*dz){
-                this.vel.x*=-0.7;
-                this.vel.z*=-0.7;
-            }
-        }
-        }*/
         var res=8;
         var collided=false;
 
@@ -126,7 +127,29 @@ var Car=function(){
         this.pos.z+=this.vel.z*dt;
         var relativevelX;
         var relativevelZ;
+        //oreder
+        this.checklapend();
+        var tp=cp[this.cp];
+        var dx=tp.x-this.pos.x;
+        var dz=tp.z-this.pos.z;
+        this.dsq=dx*dx+dz*dz;
+        if(this.dsq<100){
+            this.cp++;
+            this.checklapend();
+            tp=cp[this.cp];
+            dx=tp.x-this.pos.x;
+            dz=tp.z-this.pos.z;
+            this.dsq=dx*dx+dz*dz;
+        }
+        //this.dsq=
     }
+    this.checklapend=function(){
+            if(this.cp>=cp.length){
+                this.lap++;
+                this.cp=1;
+            }
+    }
+    this.dsq=Infinity;
 }
 
 
@@ -163,26 +186,31 @@ function addlongcube(x,y,z,sx,sy,sz){
 }
 var loader = new THREE.ObjectLoader();
 loader.load("model.json",function ( obj ) {
-    obj.position.set(0,0,20);
+    obj.position.set(10,0,30);
     obj.rotation.y=Math.PI/4*5;
     var mesh=obj.getChildByName("cube",true);
     targetList.push(mesh);
     scene.add( obj );
 });
-for(var i=-10;i<70;i++){
+for(var i=-10;i<40;i++){
     addcube(-12,0,i*4);
+    addcube(60,0,i*4);
+}
+for(var i=-10;i<40;i++){
+    addcube(i*4,0,-12);
+    addcube(i*4,0,62);
 }
 addlongcube(-5,0,0,2,1,20);
 //network
 var state="wait";
-var start=new Date().getTime()+50000;
-var end=new Date().getTime()+60000;
+var start=new Date().getTime()+10000;
+var end=new Date().getTime()+600000;
 var next=new Date().getTime()+70000;
 var sent=false;
 doget(null,"/newcar",function(e){
     player.cid=Number.parseInt(e);
     alert("your cid is "+player.cid);
-})
+});
 var othercar=[];
 function updatecars(cs){
     for(var i=0;i<cs.length;i++){
@@ -233,7 +261,15 @@ function rotate(x,y,r){
     var p={x:x*cos-y*sin,y:x*sin+y*cos};
     return p;
 }
-
+for(var i=0;i<cp.length;i++){
+    var geometry = new THREE.CubeGeometry(1, 5, 1);
+    var material = new THREE.MeshLambertMaterial( { color: 0x00ff00} );
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.x=-cp[i].x;
+    mesh.position.y=3;
+    mesh.position.z=cp[i].z;
+    scene.add( mesh );
+}
 var timenow=new Date().getTime();
 function timer(){
     if(player.cid!=null&&!sent){
@@ -276,15 +312,23 @@ function timer(){
         player.acc=0;
     }
     player.updateMesh();
+    order=0;
     for(var i=0;i<othercar.length;i++){
+        if(othercar[i].cid==player.cid)continue;
         if(state=="race"){
-            if(othercar[i].cid==player.cid)return;
             othercar[i].physics(dt,false);
         }
         if(state=="wait"){
             //othercar[i].reset();
         }
         othercar[i].updateMesh();
+        if(othercar[i].lap>player.lap){
+            order++;
+        }else if(othercar[i].cp>player.cp){
+            order++;
+        }else if(othercar[i].cp==player.cp&&othercar[i].dsq<player.dsq){
+            order++;
+        }
     }
     camera.position.x=player.mesh.position.x-Math.sin(player.rot)*12;
     camera.position.y=3;
@@ -323,7 +367,19 @@ function ui(){
     }else if(state=="race"){
         laptxt+="race will end "+ Math.floor((end- timenow)*0.001)+"s";
     }
+    laptxt+=player.cp+"lap:"+player.lap+"order:";
     lap.innerHTML=laptxt;
+    var ordertxt="";
+    if(order==0){
+        ordertxt="1st";
+    }else if(order==1){
+        ordertxt="2nd";
+    }else if(order==2){
+        ordertxt="3rd";
+    }else{
+        ordertxt=(order+1)+"th";
+    }
+    orderdiv.innerHTML=ordertxt;
     laptxt="";
 }
 // render

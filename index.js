@@ -11,6 +11,7 @@ var car=function(){
     this.cid=cidgen;
     this.lap=0;
     this.cp=0;
+    this.dsq=0;
     this.acc=0;
     this.audience=false;
     cidgen++;
