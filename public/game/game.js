@@ -56,6 +56,11 @@ var Car=function(){
     this.acc=0;
     this.power=5;
     this.terminalVelocity=30;
+    this.reset=function(){
+        this.pos={x:0,z:0};
+        this.vel={x:0,z:0};
+        this.rot=0;
+    }
     this.updateMesh=function(){
         this.mesh.position.x=-this.pos.x;
         this.mesh.position.z=this.pos.z;
@@ -260,6 +265,9 @@ function timer(){
     //lap.innerHTML=player.lap;
     if(keysPress[37]==true)handle=1;
     if(keysPress[39]==true)handle=-1;
+    if(state=="wait"){
+        player.reset();
+    }
     if(state=="race"){
         player.rot+=handle*dt*1;
         player.acc=1;
@@ -272,6 +280,9 @@ function timer(){
         if(state=="race"){
             if(othercar[i].cid==player.cid)return;
             othercar[i].physics(dt,false);
+        }
+        if(state=="wait"){
+            //othercar[i].reset();
         }
         othercar[i].updateMesh();
     }
