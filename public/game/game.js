@@ -7,11 +7,20 @@ renderer.domElement.style.position = "absolute";
 renderer.domElement.style.zIndex = "0";
 document.body.appendChild(renderer.domElement);
 
+var count=document.createElement("div");
+count.style.position="absolute";
+count.style.width=window.innerWidth+"px";
+count.style.top=(window.innerHeight/2-20)+"px";
+count.style.fontSize="40px";
+count.style.textAlign="center";
+count.style.color="#fff";
+count.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
+document.body.appendChild(count);
 var lap=document.createElement("div");
 lap.style.position="absolute";
 lap.style.zIndex="1";
 lap.style.color="white";
-lap.style.backgroundColor="black";
+lap.style.background="linear-gradient(to right, rgba(0,0,130,0.5),rgba(0,0,130,0.7),rgba(0,0,130,0.5))";
 document.body.appendChild(lap);
 var targetList=[];
 var projector = new THREE.Projector();
@@ -153,7 +162,7 @@ loader.load("model.json",function ( obj ) {
     obj.rotation.y=Math.PI/4*5;
     var mesh=obj.getChildByName("cube",true);
     targetList.push(mesh);
-     scene.add( obj );
+    scene.add( obj );
 });
 for(var i=-10;i<70;i++){
     addcube(-12,0,i*4);
@@ -251,13 +260,19 @@ function timer(){
     //lap.innerHTML=player.lap;
     if(keysPress[37]==true)handle=1;
     if(keysPress[39]==true)handle=-1;
-    player.rot+=handle*dt*1;
-    player.acc=1;
-    player.physics(dt,true);
+    if(state=="race"){
+        player.rot+=handle*dt*1;
+        player.acc=1;
+        player.physics(dt,true);
+    }else{
+        player.acc=0;
+    }
     player.updateMesh();
     for(var i=0;i<othercar.length;i++){
-        if(othercar[i].cid==player.cid)return;
-        othercar[i].physics(dt,false);
+        if(state=="race"){
+            if(othercar[i].cid==player.cid)return;
+            othercar[i].physics(dt,false);
+        }
         othercar[i].updateMesh();
     }
     camera.position.x=player.mesh.position.x-Math.sin(player.rot)*12;
@@ -277,8 +292,12 @@ function timer(){
 }timer();
 function ui(){
     laptxt=state+" ";
+    if(state!=="wait"){
+        count.style.visibility="hidden";
+    }
     if(state=="wait"){
-        laptxt+=""+ Math.floor((start- timenow)*0.001)+"";
+        count.style.visibility="visible";
+        count.innerHTML="Race will begin in "+ Math.floor((start- timenow)*0.001)+"s";
     }else if(state=="result"){
         laptxt+="next race will begin"+ Math.floor((end- timenow)*0.001)+"s";
     }else if(state=="race"){
