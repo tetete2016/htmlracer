@@ -179,9 +179,9 @@ function timer(){
                 });
                 return;
             }
+            var p=JSON.parse(res);
             updatecars(p.cars);
             //console.log(res);
-            var p=JSON.parse(res);
             console.log(p);
             state=p.state;
             start=p.start;
