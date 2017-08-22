@@ -172,7 +172,6 @@ function timer(){
         d.acc=player.acc;
         dopost(JSON.stringify(d),"/setpos",function(res){
             sent=false; 
-            updatecars(p.cars);
             if(res=="nocar"){
                 doget(null,"/newcar",function(e){
                     player.cid=Number.parseInt(e);
@@ -180,6 +179,7 @@ function timer(){
                 });
                 return;
             }
+            updatecars(p.cars);
             //console.log(res);
             var p=JSON.parse(res);
             console.log(p);
