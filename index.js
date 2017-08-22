@@ -44,6 +44,7 @@ function waitState(){
 //next<time
 function switchState(){
     cars=[];
+    cidgen=0;
     start=next+WAIT_DURATION;
     end=start+RACE_DURATION;
     next=end+RESULT_DURATION;
