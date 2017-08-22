@@ -7,6 +7,7 @@ renderer.domElement.style.position = "absolute";
 renderer.domElement.style.zIndex = "0";
 document.body.appendChild(renderer.domElement);
 var order=0;
+//ui
 var count=document.createElement("div");
 count.style.position="absolute";
 count.style.width=window.innerWidth+"px";
@@ -56,105 +57,9 @@ var cp=[
     {x:-50,z:0},
     {x:0,z:0}
 ];
-var Car=function(){
-    this.cp=0;
-    this.lap=1;
-    this.mesh=null;
-    this.setMesh=function(geo,mat){
-        this.mesh=new THREE.Mesh(geo,mat);
-        scene.add(this.mesh);
-    }
-    this.cid=null;
-    this.pos={x:0,z:-20};
-    this.vel={x:0,z:0};
-    this.rot=0;//radian
-    this.fric=1;
-    this.drag=1;
-    this.acc=0;
-    this.power=5;
-    this.terminalVelocity=30;
-    this.reset=function(){
-        this.pos={x:0,z:0};
-        this.vel={x:0,z:0};
-        this.rot=0;
-    }
-    this.updateMesh=function(){
-        this.mesh.position.x=-this.pos.x;
-        this.mesh.position.z=this.pos.z;
-        this.mesh.rotation.y=this.rot;
-    }
-    this.physics=function(dt,isplayer){
-        //ma+kv=0
-        //k=-ma/vel
-        var drag=-this.power/this.terminalVelocity;
-        var a=rotate(0,this.acc,this.rot);
-        var v=Math.sqrt(this.vel.x*this.vel.x+this.vel.z*this.vel.z);
-        if(!isplayer){
-            /*
-            this.vel.x+=dt*a.x;
-            this.vel.z+=dt*a.y;
-            this.vel.x+=this.vel.x*drag*dt;
-            this.vel.z+=this.vel.z*drag*dt;
-            return;*/
-        }
-        this.vel.x+=dt*a.x*this.power;
-        this.vel.z+=dt*a.y*this.power;
-        var v1=rotate(this.vel.x,this.vel.z,-this.rot);
-        var relativeSideForce=v1.x;
-        var sideforce=rotate(v1.x,0,this.rot);
-        this.vel.x-=sideforce.x*dt;
-        this.vel.z-=sideforce.y*dt;
-        this.vel.x+=this.vel.x*drag*dt;
-        this.vel.z+=this.vel.z*drag*dt;
-        var res=8;
-        var collided=false;
-
-        for(var i=-res/2;i<res/2;i++){
-            if(collided)continue;
-            var rv=rotate(this.vel.x/v,this.vel.z/v,Math.PI/2/res*i);
-            var ray = new THREE.Raycaster(new THREE.Vector3(-this.pos.x,0,this.pos.z), new THREE.Vector3(-rv.x, 0, rv.y).normalize());
-            var obj = ray.intersectObjects(targetList);
-            if (obj.length > 0) {
-                var d=obj[0].distance;
-                if(d<1){
-                    this.vel.x=-rv.x*v;
-                    this.vel.z=-rv.y*v;
-                    collided=true;
-                }
-            } 
-        }
-        this.pos.x+=this.vel.x*dt;
-        this.pos.z+=this.vel.z*dt;
-        var relativevelX;
-        var relativevelZ;
-        //oreder
-        this.checklapend();
-        var tp=cp[this.cp];
-        var dx=tp.x-this.pos.x;
-        var dz=tp.z-this.pos.z;
-        this.dsq=dx*dx+dz*dz;
-        if(this.dsq<100){
-            this.cp++;
-            this.checklapend();
-            tp=cp[this.cp];
-            dx=tp.x-this.pos.x;
-            dz=tp.z-this.pos.z;
-            this.dsq=dx*dx+dz*dz;
-        }
-        //this.dsq=
-    }
-    this.checklapend=function(){
-            if(this.cp>=cp.length){
-                this.lap++;
-                this.cp=1;
-            }
-    }
-    this.dsq=Infinity;
-}
-
 
 var carGeo = new THREE.CubeGeometry(2, 2, 2);
-var carMat = new THREE.MeshLambertMaterial( { color: 0xff0000} )
+var carMat = new THREE.MeshLambertMaterial( { color: 0xff0000} );
 var player=new Car();
 player.setMesh(carGeo,carMat);
 
@@ -164,26 +69,6 @@ scene.add( light );
 
 var l2 = new THREE.AmbientLight(ambient);
 scene.add( l2 );
-function addcube(x,y,z){
-    var geometry = new THREE.CubeGeometry(2, 2, 2);
-    var material = new THREE.MeshLambertMaterial( { color: 0xffffff} );
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.position.x=x;
-    mesh.position.y=y;
-    mesh.position.z=z;
-    scene.add( mesh );
-    targetList.push(mesh);
-}
-function addlongcube(x,y,z,sx,sy,sz){
-    var geometry = new THREE.CubeGeometry(sx, sy, sz);
-    var material = new THREE.MeshLambertMaterial( { color: 0xffffff} );
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.position.x=x;
-    mesh.position.y=y;
-    mesh.position.z=z;
-    scene.add( mesh );
-    targetList.push(mesh);
-}
 var loader = new THREE.ObjectLoader();
 loader.load("model.json",function ( obj ) {
     obj.position.set(10,0,30);
@@ -242,7 +127,6 @@ var lasttime=new Date().getTime();
 var keysPress=new Array(1000);
 var handle=0;
 var tilt=0;
-var laptxt="";
 window.addEventListener('devicemotion', function (event) {
     var gv = event.accelerationIncludingGravity;
     tilt=gv.x/4;
@@ -358,12 +242,14 @@ function timer(){
     requestAnimationFrame(timer);
 }timer();
 function ui(){
-    laptxt=state+" ";
+    var laptxt=state+" ";
     if(state!=="wait"){
-        count.style.visibility="hidden";
+        if(count.style.visibility!="hidden")
+            count.style.visibility="hidden";
     }
     if(state=="wait"){
-        count.style.visibility="visible";
+        if(count.style.visibility!="visible")
+            count.style.visibility="visible";
         count.innerHTML="Race will begin in "+ Math.floor((start- timenow)*0.001)+"s";
     }else if(state=="result"){
         laptxt+="next race will begin"+ Math.floor((next- timenow)*0.001)+"s";
@@ -371,7 +257,7 @@ function ui(){
         laptxt+="race will end "+ Math.floor((end- timenow)*0.001)+"s";
     }
     laptxt+=player.cp+"lap:"+player.lap+"order:";
-    lap.innerHTML=laptxt;
+
     var ordertxt="";
     if(order==0){
         ordertxt="1st";
@@ -382,7 +268,32 @@ function ui(){
     }else{
         ordertxt=(order+1)+"th";
     }
-    orderdiv.innerHTML=ordertxt;
+    if(lap.innerHTML!==laptxt){
+        lap.innerHTML=laptxt;
+    }
+    if(orderdiv.innerHTML!==ordertxt){
+        orderdiv.innerHTML=ordertxt;
+    }
     laptxt="";
+}
+function addcube(x,y,z){
+    var geometry = new THREE.CubeGeometry(2, 2, 2);
+    var material = new THREE.MeshLambertMaterial( { color: 0xffffff} );
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.x=x;
+    mesh.position.y=y;
+    mesh.position.z=z;
+    scene.add( mesh );
+    targetList.push(mesh);
+}
+function addlongcube(x,y,z,sx,sy,sz){
+    var geometry = new THREE.CubeGeometry(sx, sy, sz);
+    var material = new THREE.MeshLambertMaterial( { color: 0xffffff} );
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.x=x;
+    mesh.position.y=y;
+    mesh.position.z=z;
+    scene.add( mesh );
+    targetList.push(mesh);
 }
 // render
