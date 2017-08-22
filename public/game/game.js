@@ -58,8 +58,8 @@ var cp=[
     {x:0,z:0}
 ];
 
-var carGeo = new THREE.CubeGeometry(2, 2, 2);
-var carMat = new THREE.MeshLambertMaterial( { color: 0xff0000} );
+var carGeo = new THREE.CubeGeometry(1, 1, 1);
+var carMat = new THREE.MeshLambertMaterial( { color: 0xffffff} );
 var player=new Car();
 player.setMesh(carGeo,carMat);
 
@@ -94,7 +94,7 @@ var next=new Date().getTime()+70000;
 var sent=false;
 doget(null,"/newcar",function(e){
     player.cid=Number.parseInt(e);
-    alert("your cid is "+player.cid);
+    //alert("your cid is "+player.cid);
 });
 var othercar=[];
 function updatecars(cs){
@@ -149,6 +149,7 @@ function rotate(x,y,r){
     return p;
 }
 for(var i=0;i<cp.length;i++){
+    
     var geometry = new THREE.CubeGeometry(1, 5, 1);
     var material = new THREE.MeshLambertMaterial( { color: 0x00ff00} );
     var mesh = new THREE.Mesh( geometry, material );
@@ -156,6 +157,7 @@ for(var i=0;i<cp.length;i++){
     mesh.position.y=3;
     mesh.position.z=cp[i].z;
     scene.add( mesh );
+    
 }
 var timenow=new Date().getTime();
 function timer(){
@@ -170,6 +172,14 @@ function timer(){
         d.acc=player.acc;
         dopost(JSON.stringify(d),"/setpos",function(res){
             sent=false; 
+            updatecars(p.cars);
+            if(res=="nocar"){
+                doget(null,"/newcar",function(e){
+                    player.cid=Number.parseInt(e);
+                    //alert("your cid is "+player.cid);
+                });
+                return;
+            }
             //console.log(res);
             var p=JSON.parse(res);
             console.log(p);
@@ -177,7 +187,6 @@ function timer(){
             start=p.start;
             end=p.end;
             next=p.next;
-            updatecars(p.cars);
         });
         sent=true;
     }

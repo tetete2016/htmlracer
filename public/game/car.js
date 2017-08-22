@@ -11,13 +11,13 @@ var Car=function(){
     this.pos={x:0,z:-20};
     this.vel={x:0,z:0};
     this.rot=0;//radian
-    this.fric=1;
+    this.fric=10;
     this.drag=1;
     this.acc=0;
     this.power=5;
     this.terminalVelocity=30;
     this.reset=function(){
-        this.pos={x:0,z:0};
+        this.pos={x:Math.floor(this.cid%5),z:Math.floor(this.cid/5)};
         this.vel={x:0,z:0};
         this.rot=0;
     }
@@ -45,8 +45,8 @@ var Car=function(){
         var v1=rotate(this.vel.x,this.vel.z,-this.rot);
         var relativeSideForce=v1.x;
         var sideforce=rotate(v1.x,0,this.rot);
-        this.vel.x-=sideforce.x*dt;
-        this.vel.z-=sideforce.y*dt;
+        this.vel.x-=sideforce.x*dt*this.fric;
+        this.vel.z-=sideforce.y*dt*this.fric;
         this.vel.x+=this.vel.x*drag*dt;
         this.vel.z+=this.vel.z*drag*dt;
         var res=8;
@@ -59,9 +59,9 @@ var Car=function(){
             var obj = ray.intersectObjects(targetList);
             if (obj.length > 0) {
                 var d=obj[0].distance;
-                if(d<1){
-                    this.vel.x=-rv.x*v;
-                    this.vel.z=-rv.y*v;
+                if(d<0.5){
+                    this.vel.x+=-rv.x*v;
+                    this.vel.z+=-rv.y*v;
                     collided=true;
                 }
             } 

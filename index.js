@@ -43,6 +43,7 @@ function waitState(){
 }
 //next<time
 function switchState(){
+    cars=[];
     start=next+WAIT_DURATION;
     end=start+RACE_DURATION;
     next=end+RESULT_DURATION;
@@ -94,18 +95,25 @@ app.post('/setpos', function (request, response) {
         var vx=request.body.vel.x;
         var vz=request.body.vel.z;
         console.log("carindex:"+c);
-        if(c!=null){
-            if(vx!=null&&vz!=null){
-                cars[c].vel.x=vx;
-                cars[c].vel.z=vz;
+        try{
+            if(c!=null){
+                var car1=cars[c];
+                if(vx!=null&&vz!=null){
+                    car1.vel.x=vx;
+                    car1.vel.z=vz;
+                }
+                if(p.x!=null&&p.z!=null){
+                    car1.pos.x=p.x;
+                    car1.pos.z=p.z;
+                }
+                car1.rot=r;
+                car1.acc=a;
+                cars[c]=car1;
+            }else{
+                response.send("nocar");
+                return;
             }
-            if(p.x!=null&&p.z!=null){
-                cars[c].pos.x=p.x;
-                cars[c].pos.z=p.z;
-            }
-            cars[c].rot=r;
-            cars[c].acc=a;
-        }
+        }catch(e){}
     }
     response.send(JSON.stringify({cars:cars,state:(state),start:start,end:end,next:next}));
 });
