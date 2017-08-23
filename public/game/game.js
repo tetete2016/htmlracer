@@ -191,11 +191,13 @@ function timer(){
             if(res=="nocar"){
                 if(creatingcar)return;
                 creatingcar=true;
+                /*
                 doget(null,"/newcar",function(e){
                     player.cid=Number.parseInt(e);
                     creatingcar=false;
                     //alert("your cid is "+player.cid);
                 });
+                */
                 return;
             }
             try{
