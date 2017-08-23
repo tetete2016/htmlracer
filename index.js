@@ -58,7 +58,7 @@ app.get('/newcar', function (request, response) {
     }
     response.send(JSON.stringify(
         {cid:c.cid,
-         state:(state),start:start,end:end,next:next}));
+         state:state,start:start,end:end,next:next}));
 });
 app.get('/carlist', function (request, response) {
     response.send(JSON.stringify(cars));

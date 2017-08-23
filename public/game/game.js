@@ -94,12 +94,12 @@ var end=new Date().getTime()+600000;
 var next=new Date().getTime()+70000;
 var sent=false;
 doget(null,"/newcar",function(e){
-    var data=JSON.parse(e);
-    player.cid=e.cid;
-    state=e.state;
-    if(e.start!=null)start=e.start;
-    if(e.end!=null)end=e.end;
-    if(e.next!=null)next=e.next;
+    var d=JSON.parse(e);
+    player.cid=d.cid;
+    state=d.state;
+    start=d.start;
+    end=d.end;
+    next=d.next;
     //alert("your cid is "+player.cid);
 });
 var othercar=[];
