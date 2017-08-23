@@ -230,6 +230,12 @@ function timer(){
         //switchState();
         location.reload();
         return;
+    }
+    /*
+    if(timenow>next){
+        //switchState();
+        location.reload();
+        return;
     }else if(timenow>end){
         state="result";
     }else if(timenow>start){
@@ -237,6 +243,7 @@ function timer(){
     }else {
         state="wait";
     }
+    */
     requestAnimationFrame(timer);
 }timer();
 function addcube(x,y,z){
