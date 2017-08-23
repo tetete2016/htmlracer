@@ -236,7 +236,7 @@ function timer(){
             othercar[i].physics(dt,false);
         }
         if(state=="wait"){
-            //othercar[i].reset();
+            othercar[i].reset();
         }
         othercar[i].updateMesh();
         if(othercar[i].lap>player.lap){
@@ -262,7 +262,7 @@ function timer(){
     ui();
     if(timenow>next){
         //switchState();
-        if(!statechanged)changestate();
+        location.reload();
     }else if(timenow>end){
         state="result";
     }else if(timenow>start){
@@ -272,15 +272,6 @@ function timer(){
     }
     requestAnimationFrame(timer);
 }timer();
-
-var statechanged=false;
-function changestate(){
-    statechanged=true;
-    for(var i=0;i<othercar.length;i++){
-        othercar[i].remove();
-    }
-    othercar=[];
-}
 function ui(){
     var laptxt=state+" ";
     if(state!=="wait"){

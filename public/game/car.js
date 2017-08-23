@@ -95,7 +95,4 @@ var Car=function(){
             }
     }
     this.dsq=Infinity;
-    this.remove=function(){
-        scene.remove(scene.getObjectByName(this.mesh.name));
-    }
 };
