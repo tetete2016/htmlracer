@@ -100,6 +100,7 @@ doget(null,"/newcar",function(e){
     start=d.start;
     end=d.end;
     next=d.next;
+    player.audience=d.audience;
     //alert("your cid is "+player.cid);
 });
 var othercar=[];
