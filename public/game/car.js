@@ -1,5 +1,6 @@
 
 var Car=function(){
+    this.audience=false;
     this.cp=0;
     this.lap=1;
     this.mesh=null;

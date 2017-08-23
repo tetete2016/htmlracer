@@ -51,11 +51,14 @@ function switchState(){
 }
 app.get('/newcar', function (request, response) {
     var c=new car();
+    if(state!="wait")c.audience=true;
     cars.push(c);
     if(state=="wait"){
         waitState();
     }
-    response.send(c.cid+"");
+    response.send(JSON.stringify(
+        {cid:c.cid,
+         state:(state),start:start,end:end,next:next}));
 });
 app.get('/carlist', function (request, response) {
     response.send(JSON.stringify(cars));

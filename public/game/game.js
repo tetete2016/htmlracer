@@ -59,6 +59,7 @@ var cp=[
 ];
 
 var carGeo = new THREE.CubeGeometry(1, 1, 1);
+var carMatA = new THREE.MeshLambertMaterial( { color: 0xffffff,transparent:true,opacity:0.5} );
 var carMat = new THREE.MeshLambertMaterial( { color: 0xffffff} );
 var player=new Car();
 player.setMesh(carGeo,carMat);
@@ -93,7 +94,12 @@ var end=new Date().getTime()+600000;
 var next=new Date().getTime()+70000;
 var sent=false;
 doget(null,"/newcar",function(e){
-    player.cid=Number.parseInt(e);
+    var data=JSON.parse(e);
+    player.cid=e.cid;
+    state=e.state;
+    start=e.start;
+    end=e.end;
+    next=e.next;
     //alert("your cid is "+player.cid);
 });
 var othercar=[];
@@ -107,6 +113,7 @@ function updatecars(cs){
                 othercar[j].vel=cs[i].vel;
                 othercar[j].rot=cs[i].rot;
                 othercar[j].acc=cs[i].acc;
+                othercar[j].audience=cs[i].audience;
                 exists=true;
             }
         }
@@ -117,7 +124,12 @@ function updatecars(cs){
             newcar.vel=cs[i].vel;
             newcar.rot=cs[i].rot;
             newcar.acc=cs[i].acc;
-            newcar.setMesh(carGeo,carMat);
+            othercar[j].audience=cs[i].audience;
+            if(cs[i].audience){
+                newcar.setMesh(carGeo,carMatA);
+            }else{
+                newcar.setMesh(carGeo,carMat);
+            }
             othercar.push(newcar);
         }
     }
@@ -149,7 +161,7 @@ function rotate(x,y,r){
     return p;
 }
 for(var i=0;i<cp.length;i++){
-    
+
     var geometry = new THREE.CubeGeometry(1, 5, 1);
     var material = new THREE.MeshLambertMaterial( { color: 0x00ff00} );
     var mesh = new THREE.Mesh( geometry, material );
@@ -157,7 +169,7 @@ for(var i=0;i<cp.length;i++){
     mesh.position.y=3;
     mesh.position.z=cp[i].z;
     scene.add( mesh );
-    
+
 }
 var creatingcar=false;
 var timenow=new Date().getTime();
@@ -184,14 +196,14 @@ function timer(){
                 return;
             }
             try{
-            var p=JSON.parse(res);
-            updatecars(p.cars);
-            //console.log(res);
-            console.log(p);
-            state=p.state;
-            start=p.start;
-            end=p.end;
-            next=p.next;
+                var p=JSON.parse(res);
+                updatecars(p.cars);
+                //console.log(res);
+                console.log(p);
+                state=p.state;
+                start=p.start;
+                end=p.end;
+                next=p.next;
             }catch(e){}
         });
         sent=true;
