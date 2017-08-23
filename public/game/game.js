@@ -158,7 +158,7 @@ function timer(){
                 */
                 return;
             }
-            try{
+            //try{
                 var p=JSON.parse(res);
                 updatecars(p.cars);
                 //console.log(res);
@@ -168,10 +168,12 @@ function timer(){
                 end=p.end;
                 next=p.next;
                 gameid=p.gameid;
+            /*
             }catch(e){
-                alert("error at setpos");
-                alert(JSON.stringify(e));
+                //alert("error at setpos");
+                //alert(JSON.stringify(e));
             }
+            */
         });
         sent=true;
     }
