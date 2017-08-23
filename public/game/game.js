@@ -183,6 +183,7 @@ function timer(){
                 });
                 return;
             }
+            try{
             var p=JSON.parse(res);
             updatecars(p.cars);
             //console.log(res);
@@ -191,6 +192,7 @@ function timer(){
             start=p.start;
             end=p.end;
             next=p.next;
+            }catch(e){}
         });
         sent=true;
     }
