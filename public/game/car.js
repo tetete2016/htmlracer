@@ -6,6 +6,7 @@ var Car=function(){
     this.mesh=null;
     this.setMesh=function(geo,mat){
         this.mesh=new THREE.Mesh(geo,mat);
+        this.mesh.name="car"+this.cid;
         scene.add(this.mesh);
     }
     this.cid=null;
@@ -94,4 +95,7 @@ var Car=function(){
             }
     }
     this.dsq=Infinity;
-}
+    this.remove=function(){
+        scene.remove(scene.getObjectByName(this.mesh.name));
+    }
+};

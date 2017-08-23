@@ -262,6 +262,7 @@ function timer(){
     ui();
     if(timenow>next){
         //switchState();
+        if(!statechanged)changestate();
     }else if(timenow>end){
         state="result";
     }else if(timenow>start){
@@ -271,6 +272,15 @@ function timer(){
     }
     requestAnimationFrame(timer);
 }timer();
+
+var statechanged=false;
+function changestate(){
+    statechanged=true;
+    for(var i=0;i<othercar.length;i++){
+        othercar[i].remove();
+    }
+    othercar=[];
+}
 function ui(){
     var laptxt=state+" ";
     if(state!=="wait"){
