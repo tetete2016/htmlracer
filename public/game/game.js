@@ -159,6 +159,7 @@ for(var i=0;i<cp.length;i++){
     scene.add( mesh );
     
 }
+var creatingcar=false;
 var timenow=new Date().getTime();
 function timer(){
     if(player.cid!=null&&!sent){
@@ -173,8 +174,11 @@ function timer(){
         dopost(JSON.stringify(d),"/setpos",function(res){
             sent=false; 
             if(res=="nocar"){
+                if(creatingcar)return;
+                creatingcar=true;
                 doget(null,"/newcar",function(e){
                     player.cid=Number.parseInt(e);
+                    creatingcar=false;
                     //alert("your cid is "+player.cid);
                 });
                 return;
