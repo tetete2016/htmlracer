@@ -26,6 +26,17 @@ orderdiv.style.color="#fff";
 orderdiv.style.zIndex="1";
 orderdiv.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
 document.body.appendChild(orderdiv);
+
+var netdiv=document.createElement("div");
+netdiv.style.position="absolute";
+netdiv.style.zIndex="1";
+netdiv.style.color="white";
+netdiv.style.top= (window.innerHeight-50)+"px";
+netdiv.style.height="50px";
+netdiv.style.width="200px";
+netdiv.style.background="linear-gradient(to right, rgba(0,0,130,0.5),rgba(0,0,130,0.7),rgba(0,0,130,0.5))";
+document.body.appendChild(netdiv);
+
 function ui(){
     var laptxt=state+" ";
     if(state!=="wait"){

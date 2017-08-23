@@ -68,6 +68,9 @@ var end=new Date().getTime()+600000;
 var next=new Date().getTime()+70000;
 var sent=false;
 var gameid=null;
+var timediff=null;
+var lag=null;
+var senttime=null;
 doget(null,"/newcar",function(e){
     var d=JSON.parse(e);
     player.cid=d.cid;
@@ -134,7 +137,8 @@ var creatingcar=false;
 var timenow=new Date().getTime();
 console.log(player.pos);
 function timer(){
-    console.log(JSON.stringify(player.pos)+","+timenow);
+    timenow=new Date().getTime();
+    //console.log(JSON.stringify(player.pos)+","+timenow);
     if(player.cid!=null&&!sent){
         var d={};
         d.pos=player.pos;
@@ -144,7 +148,9 @@ function timer(){
         d.lap=player.lap;
         d.cid=player.cid;
         d.acc=player.acc;
+        senttime=timenow;
         dopost(JSON.stringify(d),"/setpos",function(res){
+            lag=new Date().getTime()- senttime;
             sent=false; 
             if(res=="nocar"){
                 if(creatingcar)return;
@@ -174,10 +180,11 @@ function timer(){
                 //alert(JSON.stringify(e));
             }
             */
+            timediff=p.time-senttime-lag/2;
+            netdiv.innerHTML="lag:"+lag+" servertime:"+p.time+" timediff:"+timediff;
         });
         sent=true;
     }
-    timenow=new Date().getTime();
     var dt=timenow-lasttime;
     dt*=0.001;
     handle=tilt;

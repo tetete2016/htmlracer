@@ -80,11 +80,11 @@ app.post('/setpos', function (request, response) {
     var time=new Date().getTime();
     if(time>next){
         switchState();
-    }else if(time>end){
+    } else if(time>end){
         state="result";
-    }else if(time>start){
+    } else if(time>start){
         state="race";
-    }else {
+    } else {
         state="wait";
     }
     console.log(state);
@@ -121,7 +121,8 @@ app.post('/setpos', function (request, response) {
             }
         }catch(e){}
     }
-    response.send(JSON.stringify({cars:cars,state:(state),start:start,end:end,next:next,gameid:gameid}));
+    response.send(JSON.stringify({cars:cars,state:(state),start:start,end:end,next:next,gameid:gameid,
+                                  time:new Date().getTime()}));
 });
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
