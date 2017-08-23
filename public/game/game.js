@@ -101,7 +101,7 @@ function updatecars(cs){
             newcar.vel=cs[i].vel;
             newcar.rot=cs[i].rot;
             newcar.acc=cs[i].acc;
-            othercar[j].audience=cs[i].audience;
+            newcar.audience=cs[i].audience;
             if(cs[i].audience){
                 newcar.setMesh(carGeo,carMatA);
             }else{
