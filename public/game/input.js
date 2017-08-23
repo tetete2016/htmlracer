@@ -7,8 +7,8 @@ window.addEventListener('devicemotion', function (event) {
     if(navigator.userAgent.indexOf('iPad') > 0){
         tilt=-gv.x/4;
     }
-    if(tilt>1)tilt=1;
-    if(tilt<-1)tilt=-1;
+    if(tilt>1)tilt=tilt*tilt;
+    if(tilt<-1)tilt=-tilt*tilt;
 });
 window.onkeydown = function (ev) {
     keysPress[ev.keyCode] = true;

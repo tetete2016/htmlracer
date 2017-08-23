@@ -190,6 +190,11 @@ function timer(){
         });
         sent=true;
     }
+    if(timenow>next){
+        //switchState();
+        location.reload();
+        return;
+    }
     neutralTime=timenow-timediff;
     var dt=timenow-lasttime;
     dt*=0.001;
@@ -239,11 +244,6 @@ function timer(){
     renderer.render( scene, camera );  
     lasttime=timenow;
     ui();
-    if(timenow>next){
-        //switchState();
-        location.reload();
-        return;
-    }
     /*
     if(timenow>next){
         //switchState();
