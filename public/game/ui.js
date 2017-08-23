@@ -6,6 +6,7 @@ count.style.top=(window.innerHeight/2-20)+"px";
 count.style.fontSize="40px";
 count.style.textAlign="center";
 count.style.color="#fff";
+count.style.zIndex="1";
 count.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
 document.body.appendChild(count);
 var lap=document.createElement("div");
@@ -22,9 +23,9 @@ orderdiv.style.height="60px";
 orderdiv.style.fontSize="40px";
 orderdiv.style.textAlign="center";
 orderdiv.style.color="#fff";
+orderdiv.style.zIndex="1";
 orderdiv.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
 document.body.appendChild(orderdiv);
-
 function ui(){
     var laptxt=state+" ";
     if(state!=="wait"){
