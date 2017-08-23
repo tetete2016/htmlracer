@@ -97,9 +97,9 @@ doget(null,"/newcar",function(e){
     var data=JSON.parse(e);
     player.cid=e.cid;
     state=e.state;
-    start=e.start;
-    end=e.end;
-    next=e.next;
+    if(e.start!=null)start=e.start;
+    if(e.end!=null)end=e.end;
+    if(e.next!=null)next=e.next;
     //alert("your cid is "+player.cid);
 });
 var othercar=[];
