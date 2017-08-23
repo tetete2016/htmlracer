@@ -69,8 +69,10 @@ var next=new Date().getTime()+70000;
 var sent=false;
 var gameid=null;
 var timediff=null;
+var timedifflag=null;
 var lag=null;
 var senttime=null;
+var neutralTime=null;
 doget(null,"/newcar",function(e){
     var d=JSON.parse(e);
     player.cid=d.cid;
@@ -94,6 +96,7 @@ function updatecars(cs){
                 othercar[j].rot=cs[i].rot;
                 othercar[j].acc=cs[i].acc;
                 othercar[j].audience=cs[i].audience;
+                othercar[j].physics(lag*0.001);
                 exists=true;
             }
         }
@@ -110,6 +113,7 @@ function updatecars(cs){
             }else{
                 newcar.setMesh(carGeo,carMat);
             }
+            newcar.physics(lag*0.001);
             othercar.push(newcar);
         }
     }
@@ -180,11 +184,13 @@ function timer(){
                 //alert(JSON.stringify(e));
             }
             */
-            timediff=p.time-senttime-lag/2;
+            timedifflag=p.time-senttime;
+            timediff=timedifflag-lag/2;
             netdiv.innerHTML="lag:"+lag+" servertime:"+p.time+" timediff:"+timediff;
         });
         sent=true;
     }
+    neutralTime=timenow-timediff;
     var dt=timenow-lasttime;
     dt*=0.001;
     handle=tilt;
