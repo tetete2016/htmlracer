@@ -7,32 +7,6 @@ renderer.domElement.style.position = "absolute";
 renderer.domElement.style.zIndex = "0";
 document.body.appendChild(renderer.domElement);
 var order=0;
-//ui
-var count=document.createElement("div");
-count.style.position="absolute";
-count.style.width=window.innerWidth+"px";
-count.style.top=(window.innerHeight/2-20)+"px";
-count.style.fontSize="40px";
-count.style.textAlign="center";
-count.style.color="#fff";
-count.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
-document.body.appendChild(count);
-var lap=document.createElement("div");
-lap.style.position="absolute";
-lap.style.zIndex="1";
-lap.style.color="white";
-lap.style.background="linear-gradient(to right, rgba(0,0,130,0.5),rgba(0,0,130,0.7),rgba(0,0,130,0.5))";
-document.body.appendChild(lap);
-var orderdiv=document.createElement("div");
-orderdiv.style.position="absolute";
-orderdiv.style.left=(window.innerWidth-230)+"px";
-orderdiv.style.width="230px";
-orderdiv.style.height="60px";
-orderdiv.style.fontSize="40px";
-orderdiv.style.textAlign="center";
-orderdiv.style.color="#fff";
-orderdiv.style.background="linear-gradient(to right, rgba(0,0,130,0.1),rgba(0,0,130,0.7),rgba(0,0,130,0.1))";
-document.body.appendChild(orderdiv);
 var targetList=[];
 var projector = new THREE.Projector();
 /*
@@ -93,6 +67,7 @@ var start=new Date().getTime()+10000;
 var end=new Date().getTime()+600000;
 var next=new Date().getTime()+70000;
 var sent=false;
+var gameid=null;
 doget(null,"/newcar",function(e){
     var d=JSON.parse(e);
     player.cid=d.cid;
@@ -101,6 +76,7 @@ doget(null,"/newcar",function(e){
     end=d.end;
     next=d.next;
     player.audience=d.audience;
+    gameid=d.gameid;
     //alert("your cid is "+player.cid);
 });
 var othercar=[];
@@ -137,24 +113,6 @@ function updatecars(cs){
 }
 
 var lasttime=new Date().getTime();
-var keysPress=new Array(1000);
-var handle=0;
-var tilt=0;
-window.addEventListener('devicemotion', function (event) {
-    var gv = event.accelerationIncludingGravity;
-    tilt=gv.x/4;
-    if(navigator.userAgent.indexOf('iPad') > 0){
-        tilt=-gv.x/4;
-    }
-    if(tilt>1)tilt=1;
-    if(tilt<-1)tilt=-1;
-});
-window.onkeydown = function (ev) {
-    keysPress[ev.keyCode] = true;
-}
-window.onkeyup = function (ev) {
-    keysPress[ev.keyCode] = false;
-}
 function rotate(x,y,r){
     var cos=Math.cos(r);
     var sin=Math.sin(r);
@@ -209,7 +167,11 @@ function timer(){
                 start=p.start;
                 end=p.end;
                 next=p.next;
-            }catch(e){}
+                gameid=p.gameid;
+            }catch(e){
+                alert("error at setpos");
+                alert(JSON.stringify(e));
+            }
         });
         sent=true;
     }
@@ -275,41 +237,6 @@ function timer(){
     }
     requestAnimationFrame(timer);
 }timer();
-function ui(){
-    var laptxt=state+" ";
-    if(state!=="wait"){
-        if(count.style.visibility!="hidden")
-            count.style.visibility="hidden";
-    }
-    if(state=="wait"){
-        if(count.style.visibility!="visible")
-            count.style.visibility="visible";
-        count.innerHTML="Race will begin in "+ Math.floor((start- timenow)*0.001)+"s";
-    }else if(state=="result"){
-        laptxt+="next race will begin"+ Math.floor((next- timenow)*0.001)+"s";
-    }else if(state=="race"){
-        laptxt+="race will end "+ Math.floor((end- timenow)*0.001)+"s";
-    }
-    laptxt+=player.cp+"lap:"+player.lap+"order:";
-
-    var ordertxt="";
-    if(order==0){
-        ordertxt="1st";
-    }else if(order==1){
-        ordertxt="2nd";
-    }else if(order==2){
-        ordertxt="3rd";
-    }else{
-        ordertxt=(order+1)+"th";
-    }
-    if(lap.innerHTML!==laptxt){
-        lap.innerHTML=laptxt;
-    }
-    if(orderdiv.innerHTML!==ordertxt){
-        orderdiv.innerHTML=ordertxt;
-    }
-    laptxt="";
-}
 function addcube(x,y,z){
     var geometry = new THREE.CubeGeometry(2, 2, 2);
     var material = new THREE.MeshLambertMaterial( { color: 0xffffff} );

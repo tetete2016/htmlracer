@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 
 var cidgen=0;
+var gameid=0;
 var car=function(){
     this.goal=false;
     this.pos={x:0,z:0};
@@ -43,11 +44,13 @@ function waitState(){
 //next<time
 function switchState(){
     cars=[];
+    gameid++;
     cidgen=0;
     start=next+WAIT_DURATION;
     end=start+RACE_DURATION;
     next=end+RESULT_DURATION;
     state="wait";
+    console.log("gameid:"+gameid);
 }
 app.get('/newcar', function (request, response) {
     var c=new car();
@@ -58,7 +61,7 @@ app.get('/newcar', function (request, response) {
     }
     response.send(JSON.stringify(
         {cid:c.cid,
-         state:state,start:start,end:end,next:next,audience:c.audience}));
+         state:state,start:start,end:end,next:next,audience:c.audience,gameid:gameid}));
 });
 app.get('/carlist', function (request, response) {
     response.send(JSON.stringify(cars));
@@ -118,25 +121,8 @@ app.post('/setpos', function (request, response) {
             }
         }catch(e){}
     }
-    response.send(JSON.stringify({cars:cars,state:(state),start:start,end:end,next:next}));
+    response.send(JSON.stringify({cars:cars,state:(state),start:start,end:end,next:next,gameid:gameid}));
 });
-/*
-app.post('/highscore', function (request, response) {
-    console.log(request.body);
-    if (request.body.name != null && request.body.score != null) {
-        adddata(request.body.name, request.body.score);
-        scores.push(new ScoreData(request.body.name, request.body.score));
-    }
-    console.log(scores);
-    response.send("");
-});
-
-app.get('/highscore', function (request, response) {
-    console.log(request.body);
-    var str = JSON.stringify(scores);
-    response.send(str);
-});
-*/
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
     waitState();
