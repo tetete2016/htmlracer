@@ -263,6 +263,7 @@ function timer(){
     if(timenow>next){
         //switchState();
         location.reload();
+        return;
     }else if(timenow>end){
         state="result";
     }else if(timenow>start){
