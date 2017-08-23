@@ -173,7 +173,9 @@ for(var i=0;i<cp.length;i++){
 }
 var creatingcar=false;
 var timenow=new Date().getTime();
+console.log(player.pos);
 function timer(){
+    console.log(JSON.stringify(player.pos)+","+timenow);
     if(player.cid!=null&&!sent){
         var d={};
         d.pos=player.pos;
