@@ -46,11 +46,11 @@ function ui(){
     if(state=="wait"){
         if(count.style.visibility!="visible")
             count.style.visibility="visible";
-        count.innerHTML="Race will begin in "+ Math.floor((start- timenow)*0.001)+"s";
+        count.innerHTML="Race will begin in "+ Math.floor((start- timenow+lag)*0.001)+"s";
     }else if(state=="result"){
-        laptxt+="next race will begin"+ Math.floor((next- timenow)*0.001)+"s";
+        laptxt+="next race will begin"+ Math.floor((next- timenow+lag)*0.001)+"s";
     }else if(state=="race"){
-        laptxt+="race will end "+ Math.floor((end- timenow)*0.001)+"s";
+        laptxt+="race will end "+ Math.floor((end- timenow+lag)*0.001)+"s";
     }
     laptxt+=player.cp+"lap:"+player.lap+"order:";
 
