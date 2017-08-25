@@ -24,7 +24,7 @@ var state="wait";
 var start;
 var end;
 var next;
-var RACE_DURATION=10000;
+var RACE_DURATION=60000;
 var RESULT_DURATION=10000;
 var WAIT_DURATION=10000;
 app.set('port', (process.env.PORT || 5000));

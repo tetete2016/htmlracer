@@ -24,6 +24,7 @@ var Car=function(){
         this.rot=0;
     }
     this.updateMesh=function(){
+        if(this.mesh==null)return;
         this.mesh.position.x=-this.pos.x;
         this.mesh.position.z=this.pos.z;
         this.mesh.rotation.y=this.rot;

@@ -26,10 +26,19 @@ camera.rotation.y=Math.PI;
 var scene = new THREE.Scene();
 var cp=[
     {x:0,z:0},
-    {x:0,z:50},
-    {x:-50,z:50},
-    {x:-50,z:0},
-    {x:0,z:0}
+    {x:0,z:280},
+    {x:-80,z:384},
+    {x:0,z:448},
+    {x:248,z:434},//-62 -108
+    {x:320,z:364},
+    {x:226,z:260},//-56.5 -57.5
+    {x:220,z:36},
+    {x:184,z:-32},
+    {x:40,z:-36},
+    {x:-52,z:-84},//13 21
+    {x:-92,z:-40},//23 10
+    {x:-60,z:-8},//15 2
+    {x:-16,z:-22},//4 5.6
 ];
 
 var carGeo = new THREE.CubeGeometry(1, 1, 1);
@@ -45,13 +54,16 @@ scene.add( light );
 var l2 = new THREE.AmbientLight(ambient);
 scene.add( l2 );
 var loader = new THREE.ObjectLoader();
-loader.load("model.json",function ( obj ) {
-    obj.position.set(10,0,30);
-    obj.rotation.y=Math.PI/4*5;
-    var mesh=obj.getChildByName("cube",true);
+loader.load("stage.json",function ( obj ) {
+    //obj.position.set(10,0,30);
+    //obj.rotation.y=Math.PI/4*5;
+    obj.scale.set(4,4,4);
+    var mesh=obj.getChildByName("cube_Cube.001",true);
+    console.log(mesh);
     targetList.push(mesh);
     scene.add( obj );
 });
+/*
 for(var i=-10;i<40;i++){
     addcube(-12,0,i*4);
     addcube(60,0,i*4);
@@ -61,11 +73,12 @@ for(var i=-10;i<40;i++){
     addcube(i*4,0,62);
 }
 addlongcube(-5,0,0,2,1,20);
+*/
 //network
 var state="wait";
-var start=new Date().getTime()+10000;
+var start=new Date().getTime()+1000;
 var end=new Date().getTime()+600000;
-var next=new Date().getTime()+70000;
+var next=end+70000;
 var sent=false;
 var gameid=null;
 var timediff=null;
@@ -194,6 +207,12 @@ function timer(){
         //switchState();
         location.reload();
         return;
+    }else if(timenow>end){
+        state="result";
+    }else if(timenow>start){
+        state="race";
+    }else {
+        state="wait";
     }
     neutralTime=timenow-timediff;
     var dt=timenow-lasttime;
