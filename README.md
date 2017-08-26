@@ -1,8 +1,12 @@
 #html racer
+
+
 This is a html5 online 3d racing game.
 This runs on node of heroku, but you can change the code to run it on another server.
 
 ##Getting Started
+
+
 3D model JSON in this game is generated using [three.js editor](https://www.threejs.org/editor/)
 Import your original 3d models and push "export object" button in the file menu.
 
@@ -60,11 +64,15 @@ var cp=[
 ```
 
 ##list of codes(not all of them :P)
+
 ###game.js
+
 This includes main loop, network and 3D stuff.
 ###car.js
+
 This includes car class.
 The class has physics algorithm.
 ###input.js
+
 
 ###ui.js
