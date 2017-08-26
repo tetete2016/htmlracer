@@ -4,6 +4,9 @@ var Car=function(){
     this.cp=0;
     this.lap=1;
     this.mesh=null;
+    this.setObj=function(obj){
+        this.mesh=obj;
+    }
     this.setMesh=function(geo,mat){
         this.mesh=new THREE.Mesh(geo,mat);
         this.mesh.name="car"+this.cid;
@@ -27,6 +30,7 @@ var Car=function(){
         if(this.mesh==null)return;
         this.mesh.position.x=-this.pos.x;
         this.mesh.position.z=this.pos.z;
+        this.mesh.position.y=0.25;
         this.mesh.rotation.y=this.rot;
     }
     this.physics=function(dt,isplayer){

@@ -15,8 +15,8 @@ var obj = ray.intersectObjects(targetList);
 if (obj.length > 0) {
 }
 */
-var ambient=0x114477;
-var sun=0xeebb88;
+var ambient=0x444477;
+var sun=0xbbbb88;
 var camera = new THREE.PerspectiveCamera();
 camera.aspect=width/height;
 camera.updateProjectionMatrix();
@@ -45,7 +45,7 @@ var carGeo = new THREE.CubeGeometry(1, 1, 1);
 var carMatA = new THREE.MeshLambertMaterial( { color: 0xffffff,transparent:true,opacity:0.5} );
 var carMat = new THREE.MeshLambertMaterial( { color: 0xffffff} );
 var player=new Car();
-player.setMesh(carGeo,carMat);
+//player.setMesh(carGeo,carMat);
 
 var light = new THREE.DirectionalLight(sun,2);
 light.position.set(1, 1, 2).normalize();
@@ -53,30 +53,35 @@ scene.add( light );
 
 var l2 = new THREE.AmbientLight(ambient);
 scene.add( l2 );
-var loader = new THREE.ObjectLoader();
-loader.load("stage.json",function ( obj ) {
-    //obj.position.set(10,0,30);
-    //obj.rotation.y=Math.PI/4*5;
-    obj.scale.set(4,4,4);
-    var mesh=obj.getChildByName("cube_Cube.001",true);
-    console.log(mesh);
-    targetList.push(mesh);
-    scene.add( obj );
-});
-/*
-for(var i=-10;i<40;i++){
-    addcube(-12,0,i*4);
-    addcube(60,0,i*4);
-}
-for(var i=-10;i<40;i++){
-    addcube(i*4,0,-12);
-    addcube(i*4,0,62);
-}
-addlongcube(-5,0,0,2,1,20);
-*/
+(function(){
+    var loader = new THREE.ObjectLoader();
+    loader.load("models/stage.json",function ( obj ) {
+        //obj.position.set(10,0,30);
+        //obj.rotation.y=Math.PI/4*5;
+        obj.scale.set(4,4,4);
+        var mesh=obj.getChildByName("cube_Cube.001",true);
+        console.log(mesh);
+        targetList.push(mesh);
+        scene.add( obj );
+    });
+})();
+var carobj;
+(function(){
+    var loader = new THREE.ObjectLoader();
+    loader.load("models/car.json",function ( obj ) {
+        //obj.position.set(10,0,30);
+        //obj.rotation.y=Math.PI/4*5;
+        obj.scale.set(0.5,0.5,0.5);
+        carobj=obj;
+        scene.add(obj);
+        player.setObj(obj);
+        console.log(obj.children);
+        //player.setObj(obj);
+    });
+})();
 //network
 var state="wait";
-var start=new Date().getTime()+1000;
+var start=new Date().getTime()+10000;
 var end=new Date().getTime()+600000;
 var next=end+70000;
 var sent=false;
@@ -122,16 +127,19 @@ function updatecars(cs){
             newcar.acc=cs[i].acc;
             newcar.audience=cs[i].audience;
             if(cs[i].audience){
-                newcar.setMesh(carGeo,carMatA);
+                var obj1=carobj.clone();
+                newcar.setObj(obj1);
+                //newcar.setMesh(carGeo,carMatA);
             }else{
-                newcar.setMesh(carGeo,carMat);
+                var obj1=carobj.clone();
+                newcar.setObj(obj1);
+                //newcar.setMesh(carGeo,carMat);
             }
             newcar.physics(lag*0.001);
             othercar.push(newcar);
         }
     }
 }
-
 var lasttime=new Date().getTime();
 function rotate(x,y,r){
     var cos=Math.cos(r);
@@ -182,15 +190,15 @@ function timer(){
                 return;
             }
             //try{
-                var p=JSON.parse(res);
-                updatecars(p.cars);
-                //console.log(res);
-                console.log(p);
-                state=p.state;
-                start=p.start;
-                end=p.end;
-                next=p.next;
-                gameid=p.gameid;
+            var p=JSON.parse(res);
+            updatecars(p.cars);
+            //console.log(res);
+            console.log(p);
+            state=p.state;
+            start=p.start;
+            end=p.end;
+            next=p.next;
+            gameid=p.gameid;
             /*
             }catch(e){
                 //alert("error at setpos");
@@ -250,11 +258,13 @@ function timer(){
             order++;
         }
     }
-    camera.position.x=player.mesh.position.x-Math.sin(player.rot)*12;
-    camera.position.y=3;
-    camera.position.z=player.mesh.position.z-Math.cos(player.rot)*12;
-    //camera.rotation.x=Math.PI/4;
-    camera.lookAt(player.mesh.position);
+    if(player.mesh!=null){
+        camera.position.x=player.mesh.position.x-Math.sin(player.rot)*12;
+        camera.position.y=3;
+        camera.position.z=player.mesh.position.z-Math.cos(player.rot)*12;
+        //camera.rotation.x=Math.PI/4;
+        camera.lookAt(player.mesh.position);
+    }
     //alert(camera.rotation.x+","+camera.rotation.y+","+camera.rotation.z);
     //camera.rotation.y=0;
     //camera.lookAt(player.mesh);
