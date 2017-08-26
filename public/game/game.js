@@ -61,6 +61,7 @@ scene.add( l2 );
         obj.scale.set(4,4,4);
         var mesh=obj.getChildByName("cube_Cube.001",true);
         console.log(mesh);
+        console.log(mesh.children);
         targetList.push(mesh);
         scene.add( obj );
     });
