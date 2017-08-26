@@ -6,10 +6,10 @@ This runs on node of heroku, but you can change the code to run it on another se
 Getting Started
 ===============
 
-3D model JSON in this game is generated using [three.js editor](https://www.threejs.org/editor/)
-Import your original 3d models and push "export object" button in the file menu.
+3D model JSON in this game is generated using [three.js editor](https://www.threejs.org/editor/).
 
-You can change the 3d model of your car by changing game/model/car.json
+Import your original 3d models and push "export object" button in the file menu.
+You can change the 3d model of your car by changing game/model/car.json .
 You may have to change this part of game.js:
 ```javascript
 (function(){
