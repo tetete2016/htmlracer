@@ -24,7 +24,7 @@ var state="wait";
 var start;
 var end;
 var next;
-var RACE_DURATION=60000;
+var RACE_DURATION=120000;
 var RESULT_DURATION=10000;
 var WAIT_DURATION=10000;
 app.set('port', (process.env.PORT || 5000));
@@ -92,7 +92,9 @@ app.post('/setpos', function (request, response) {
     if(request.body==null)
         response.send(JSON.stringify(cars));
    */
-    if(request.body.rot!=null&&request.body.pos!=null&&request.body.cid!=null&&request.body.acc!=null&&request.body.vel!=null){
+    if(request.body.rot!=null&&request.body.pos!=null&&
+       request.body.cid!=null&&request.body.acc!=null&&
+       request.body.vel!=null){
         var cid=request.body.cid;
         var p=request.body.pos;
         var r=request.body.rot;
@@ -114,6 +116,7 @@ app.post('/setpos', function (request, response) {
                 }
                 car1.rot=r;
                 car1.acc=a;
+                car1.goal=request.body.goal;
                 cars[c]=car1;
             }else{
                 response.send("nocar");

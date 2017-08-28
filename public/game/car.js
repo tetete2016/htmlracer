@@ -99,5 +99,6 @@ var Car=function(){
                 this.cp=1;
             }
     }
+    this.goal=null;
     this.dsq=Infinity;
 };

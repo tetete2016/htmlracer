@@ -9,12 +9,6 @@ document.body.appendChild(renderer.domElement);
 var order=0;
 var targetList=[];
 var projector = new THREE.Projector();
-/*
-var ray = new THREE.Raycaster(new THREE.Vector3(camera.position.x, camera.position.y - 0.5 + i, camera.position.z), new THREE.Vector3(vx, 0, vz).normalize());
-var obj = ray.intersectObjects(targetList);
-if (obj.length > 0) {
-}
-*/
 var ambient=0x444477;
 var sun=0xbbbb88;
 var camera = new THREE.PerspectiveCamera();
@@ -81,9 +75,11 @@ var carobj;
     });
 })();
 //network
+var clientstart=null;
+
 var state="wait";
 var start=new Date().getTime()+10000;
-var end=new Date().getTime()+600000;
+var end=new Date().getTime()+60000;
 var next=end+70000;
 var sent=false;
 var gameid=null;
@@ -92,6 +88,8 @@ var timedifflag=null;
 var lag=null;
 var senttime=null;
 var neutralTime=null;
+
+var LAP_ENDS=1;
 doget(null,"/newcar",function(e){
     var d=JSON.parse(e);
     player.cid=d.cid;
@@ -174,6 +172,7 @@ function timer(){
         d.lap=player.lap;
         d.cid=player.cid;
         d.acc=player.acc;
+        d.goal=player.goal;
         senttime=timenow;
         dopost(JSON.stringify(d),"/setpos",function(res){
             lag=new Date().getTime()- senttime;
@@ -181,16 +180,8 @@ function timer(){
             if(res=="nocar"){
                 if(creatingcar)return;
                 creatingcar=true;
-                /*
-                doget(null,"/newcar",function(e){
-                    player.cid=Number.parseInt(e);
-                    creatingcar=false;
-                    //alert("your cid is "+player.cid);
-                });
-                */
                 return;
             }
-            //try{
             var p=JSON.parse(res);
             updatecars(p.cars);
             //console.log(res);
@@ -200,12 +191,6 @@ function timer(){
             end=p.end;
             next=p.next;
             gameid=p.gameid;
-            /*
-            }catch(e){
-                //alert("error at setpos");
-                //alert(JSON.stringify(e));
-            }
-            */
             timedifflag=p.time-senttime;
             timediff=timedifflag-lag/2;
             netdiv.innerHTML="lag:"+lag+" servertime:"+p.time+" timediff:"+timediff;
@@ -213,7 +198,6 @@ function timer(){
         sent=true;
     }
     if(timenow>next){
-        //switchState();
         location.reload();
         return;
     }else if(timenow>end){
@@ -250,6 +234,11 @@ function timer(){
         if(state=="wait"){
             othercar[i].reset();
         }
+        if(othercar[i].mesh==null&&carobj!=null){
+            var c=carobj.clone();
+            scene.add(c);
+            othercar[i].setObj(c);
+        }
         othercar[i].updateMesh();
         if(othercar[i].lap>player.lap){
             order++;
@@ -271,22 +260,12 @@ function timer(){
     //camera.lookAt(player.mesh);
 
     //camera.rotation.y=player.rot;
-    renderer.render( scene, camera );  
-    lasttime=timenow;
-    ui();
-    /*
-    if(timenow>next){
-        //switchState();
-        location.reload();
-        return;
-    }else if(timenow>end){
-        state="result";
-    }else if(timenow>start){
-        state="race";
-    }else {
-        state="wait";
+    if(lap>LAP_ENDS&&player.goal==null){
+        player.goal=timenow-start;
     }
-    */
+    renderer.render( scene, camera );  
+    ui();
+    lasttime=timenow;
     requestAnimationFrame(timer);
 }timer();
 function addcube(x,y,z){
