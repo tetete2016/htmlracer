@@ -170,9 +170,6 @@ var creatingcar=false;
 var timenow=new Date().getTime();
 console.log(player.pos);
 function timer(){
-    for(var i=0;i<othercar.length;i++){
-        console.log(othercar[i].mesh);
-    }
     timenow=new Date().getTime();
     //console.log(JSON.stringify(player.pos)+","+timenow);
     if(player.cid!=null&&!sent){
