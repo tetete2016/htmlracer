@@ -58,6 +58,12 @@ scene.add( l2 );
         console.log(mesh.children);
         targetList.push(mesh);
         scene.add( obj );
+        for(var i=0;i<othercar.length;i++){
+            var c=carobj.clone();
+            othercar[i].setObj(c);
+            c.name="othercar"+i;
+            scene.add(c);
+        }
     });
 })();
 var carobj;
@@ -164,6 +170,9 @@ var creatingcar=false;
 var timenow=new Date().getTime();
 console.log(player.pos);
 function timer(){
+    for(var i=0;i<othercar.length;i++){
+        console.log(othercar[i].mesh);
+    }
     timenow=new Date().getTime();
     //console.log(JSON.stringify(player.pos)+","+timenow);
     if(player.cid!=null&&!sent){
@@ -236,11 +245,6 @@ function timer(){
         }
         if(state=="wait"){
             othercar[i].reset();
-        }
-        if(othercar[i].mesh==null&&carobj!=null){
-            var c=carobj.clone();
-            scene.add(c);
-            othercar[i].setObj(c);
         }
         othercar[i].updateMesh();
         if(othercar[i].lap>player.lap){
