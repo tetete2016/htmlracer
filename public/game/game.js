@@ -166,11 +166,11 @@ function updatecars(cs){
             newcar.audience=cs[i].audience;
             if(carobj!=null){
                 if(cs[i].audience){
-                    var obj1=carobj.clone();
+                    var obj1=carobj.GdeepCloneMaterials();
                     newcar.setObj(obj1);
                     //newcar.setMesh(carGeo,carMatA);
                 }else{
-                    var obj1=carobj.clone();
+                    var obj1=carobj.GdeepCloneMaterials();
                     newcar.setObj(obj1);
                     //newcar.setMesh(carGeo,carMat);
                 }
