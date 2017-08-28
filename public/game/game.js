@@ -126,14 +126,16 @@ function updatecars(cs){
             newcar.rot=cs[i].rot;
             newcar.acc=cs[i].acc;
             newcar.audience=cs[i].audience;
-            if(cs[i].audience){
-                var obj1=carobj.clone();
-                newcar.setObj(obj1);
-                //newcar.setMesh(carGeo,carMatA);
-            }else{
-                var obj1=carobj.clone();
-                newcar.setObj(obj1);
-                //newcar.setMesh(carGeo,carMat);
+            if(carobj!=null){
+                if(cs[i].audience){
+                    var obj1=carobj.clone();
+                    newcar.setObj(obj1);
+                    //newcar.setMesh(carGeo,carMatA);
+                }else{
+                    var obj1=carobj.clone();
+                    newcar.setObj(obj1);
+                    //newcar.setMesh(carGeo,carMat);
+                }
             }
             newcar.physics(lag*0.001);
             othercar.push(newcar);
