@@ -80,7 +80,7 @@ loadstats++;
             var obj2=carobj.GdeepCloneMaterials();
             obj2.position.set(i+10,0,0);
             scene.add(obj2);
-            if(i<othercar.length){
+            if(i<othercar.length&&(!othercar[i].mesh)){
                 othercar[i].setObj(obj2);
             }
         }
