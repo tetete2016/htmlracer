@@ -75,18 +75,17 @@ loadstats++;
         carobj=obj;
         var obj1=obj.GdeepCloneMaterials();
         scene.add(obj1);
+        player.setObj(obj1);
         for(var i=0;i<10;i++){
-            var obj2=obj.GdeepCloneMaterials();
+            var obj2=carobj.GdeepCloneMaterials();
             obj2.position.set(i+10,0,0);
             scene.add(obj2);
         }
-        player.setObj(obj1);
         console.log(obj1.children);
         for(var i=0;i<othercar.length;i++){
             var obj2=carobj.GdeepCloneMaterials();
-            othercar[i].setObj(ibj2);
-            obj2.name="othercar"+i;
             scene.add(obj2);
+            othercar[i].setObj(obj2);
         }
         //player.setObj(obj);
     });
