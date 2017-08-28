@@ -73,12 +73,12 @@ loadstats++;
         //obj.rotation.y=Math.PI/4*5;
         obj.scale.set(0.5,0.5,0.5);
         carobj=obj;
-        var obj1=obj.clone();
+        var obj1=obj.GdeepCloneMaterials();
         scene.add(obj1);
         player.setObj(obj1);
         console.log(obj1.children);
         for(var i=0;i<othercar.length;i++){
-            var c=carobj.clone();
+            var c=carobj.GdeepCloneMaterials();
             othercar[i].setObj(c);
             c.name="othercar"+i;
             scene.add(c);
@@ -86,6 +86,33 @@ loadstats++;
         //player.setObj(obj);
     });
 })();
+/** Gives the aptitude for an object3D to clone recursively with its material cloned (normal clone does not clone material)*/
+
+THREE.Object3D.prototype.GdeepCloneMaterials = function() {
+    var object = this.clone( new THREE.Object3D(), false );
+
+    for ( var i = 0; i < this.children.length; i++ ) {
+
+        var child = this.children[ i ];
+        if ( child.GdeepCloneMaterials ) {
+            object.add( child.GdeepCloneMaterials() );
+        } else {
+            object.add( child.clone() );
+        }
+
+    }
+    return object;
+};
+
+THREE.Mesh.prototype.GdeepCloneMaterials = function( object, recursive ) {
+    if ( object === undefined ) {
+        object = new THREE.Mesh( this.geometry, this.material.clone() );
+    }
+
+    THREE.Object3D.prototype.GdeepCloneMaterials.call( this, object, recursive );
+
+    return object;
+};
 //network
 var clientstart=null;
 
