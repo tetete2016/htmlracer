@@ -80,13 +80,17 @@ loadstats++;
             var obj2=carobj.GdeepCloneMaterials();
             obj2.position.set(i+10,0,0);
             scene.add(obj2);
+            if(i<othercar.length){
+                othercar[i].setObj(obj2);
+            }
         }
         console.log(obj1.children);
+        /*
         for(var i=0;i<othercar.length;i++){
             var obj2=carobj.GdeepCloneMaterials();
             scene.add(obj2);
             othercar[i].setObj(obj2);
-        }
+        }*/
         //player.setObj(obj);
     });
 })();
@@ -169,15 +173,9 @@ function updatecars(cs){
             newcar.acc=cs[i].acc;
             newcar.audience=cs[i].audience;
             if(carobj!=null){
-                if(cs[i].audience){
-                    var obj1=carobj.GdeepCloneMaterials();
-                    newcar.setObj(obj1);
-                    //newcar.setMesh(carGeo,carMatA);
-                }else{
-                    var obj1=carobj.GdeepCloneMaterials();
-                    newcar.setObj(obj1);
-                    //newcar.setMesh(carGeo,carMat);
-                }
+                var obj1=carobj.GdeepCloneMaterials();
+                newcar.setObj(obj1);
+                scene.add(obj1);
             }
             newcar.physics(lag*0.001);
             othercar.push(newcar);
