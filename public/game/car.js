@@ -77,7 +77,7 @@ var Car=function(){
         this.pos.z+=this.vel.z*dt;
         var relativevelX;
         var relativevelZ;
-        //oreder
+        //order
         this.checklapend();
         var tp=cp[this.cp];
         var dx=tp.x-this.pos.x;

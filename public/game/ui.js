@@ -94,6 +94,7 @@ function ui(){
         for(var i=0;i<othercar.length;i++){
             sorted.push(othercar[i]);
         }
+        sorted.push(player);
         sorted.some(function(a,b){
             if(a.goal!=null){
                 if(b.goal==null){
@@ -138,6 +139,7 @@ function ui(){
         for(var i=0;i<sorted.length;i++){
             var name="player "+sorted[i].cid;
             var content=sorted[i].goal;
+            if(sorted[i].cid==player.cid)name="YOU";
             contentArr1.push([name,content]);
             //contentArr1.push(["test"+i,"aaa"]);
         }
