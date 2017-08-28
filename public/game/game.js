@@ -58,12 +58,6 @@ scene.add( l2 );
         console.log(mesh.children);
         targetList.push(mesh);
         scene.add( obj );
-        for(var i=0;i<othercar.length;i++){
-            var c=carobj.clone();
-            othercar[i].setObj(c);
-            c.name="othercar"+i;
-            scene.add(c);
-        }
     });
 })();
 var carobj;
@@ -78,6 +72,12 @@ var carobj;
         scene.add(obj1);
         player.setObj(obj1);
         console.log(obj1.children);
+        for(var i=0;i<othercar.length;i++){
+            var c=carobj.clone();
+            othercar[i].setObj(c);
+            c.name="othercar"+i;
+            scene.add(c);
+        }
         //player.setObj(obj);
     });
 })();
