@@ -6,6 +6,8 @@ var Car=function(){
     this.mesh=null;
     this.setObj=function(obj){
         this.mesh=obj;
+        console.log("setobj");
+        console.log(obj);
     }
     this.setMesh=function(geo,mat){
         this.mesh=new THREE.Mesh(geo,mat);
