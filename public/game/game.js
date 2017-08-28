@@ -47,9 +47,12 @@ scene.add( light );
 
 var l2 = new THREE.AmbientLight(ambient);
 scene.add( l2 );
+var loadstats=0;
+loadstats++;
 (function(){
     var loader = new THREE.ObjectLoader();
     loader.load("models/stage.json",function ( obj ) {
+        loadstats--;
         //obj.position.set(10,0,30);
         //obj.rotation.y=Math.PI/4*5;
         obj.scale.set(4,4,4);
@@ -61,9 +64,11 @@ scene.add( l2 );
     });
 })();
 var carobj;
+loadstats++;
 (function(){
     var loader = new THREE.ObjectLoader();
     loader.load("models/car.json",function ( obj ) {
+        loadstats--;
         //obj.position.set(10,0,30);
         //obj.rotation.y=Math.PI/4*5;
         obj.scale.set(0.5,0.5,0.5);
@@ -170,6 +175,10 @@ var creatingcar=false;
 var timenow=new Date().getTime();
 console.log(player.pos);
 function timer(){
+    if(loadstats>0){
+        requestAnimationFrame(timer);
+        return;
+    }
     timenow=new Date().getTime();
     //console.log(JSON.stringify(player.pos)+","+timenow);
     if(player.cid!=null&&!sent){
