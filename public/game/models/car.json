@@ -1056,7 +1056,7 @@
 			"uuid": "EDFFA551-9D35-402A-9607-1BBE4D9598DD",
 			"type": "MeshPhongMaterial",
 			"name": "None",
-			"color": 16711680,
+			"color": 16777215,
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30,
