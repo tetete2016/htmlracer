@@ -65,6 +65,11 @@ loadstats++;
 })();
 var carobj;
 loadstats++;
+var car_texture = new THREE.TextureLoader().load( "textures/tex.png" );
+car_texture.wrapS = THREE.RepeatWrapping;
+car_texture.wrapT = THREE.RepeatWrapping;
+car_texture.repeat.set( 4, 4 );
+
 (function(){
     var loader = new THREE.ObjectLoader();
     loader.load("models/car.json",function ( obj ) {
@@ -76,7 +81,15 @@ loadstats++;
         var obj1=obj.GdeepCloneMaterials();
         scene.add(obj1);
         player.setObj(obj1);
-        for(var i=0;i<10;i++){
+        /*
+        for(var i in obj1.children){
+            console.log(i.name);
+        }
+        */
+        //console.log(obj1.getChildByName("Cube_Cube.001",true));
+        var n=10;
+        if(othercar.length>n)n=othercar.length;
+        for(var i=0;i<n;i++){
             var obj2=carobj.GdeepCloneMaterials();
             obj2.position.set(i+10,0,0);
             scene.add(obj2);
